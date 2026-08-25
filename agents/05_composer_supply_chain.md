@@ -47,9 +47,16 @@ Execute tooling:
 - `composer audit`
 - `composer check-platform-reqs`
 - `composer-require-checker` (if installed)
-- Distribution archive inspection:
+- Distribution archive inspection (cross-platform verification that excluded files are omitted):
   ```bash
-  git -C <package-path> archive -o dist_test.zip HEAD && tar -tf <package-path>/dist_test.zip | grep -E "tests/|\.github|\.env|\.audit"
+  # Generate temporary test archive
+  git -C <package-path> archive -o dist_test.zip HEAD
+
+  # Inspect contents (Linux / macOS / Windows with tar.exe):
+  tar -tf <package-path>/dist_test.zip
+
+  # Or via PowerShell (Windows):
+  # (tar.exe -tf dist_test.zip) -match "tests/|\.github|\.env|\.audit"
   ```
   *(remove `dist_test.zip` immediately after test)*
 

@@ -37,5 +37,9 @@ Welcome to the **Laravel Package Audit Framework** repository. This repository d
    - Record missing or failed tools under `tools_missing` / `tools_failed` with status `BLOCKED` or `PARTIAL`.
 5. **Pre-flight Tooling Readiness Gate**:
    - Verify required CLI binaries (`phpstan`, `pint`, `phpunit`) in Phase 0. If any essential tool is missing, halt/prompt the user immediately on turn 1 with the exact install command before proceeding.
-6. **Zero Stubs Policy**:
+6. **Cross-Platform Compatibility**:
+   - Ensure all tooling invocations and filesystem operations work seamlessly across Windows, Linux, and macOS (e.g. mirror/copy for `latest/` without requiring elevated symlink privileges).
+7. **Engineering Humility Policy**:
+   - Strictly prohibit hyperbolic, absolute, or overconfident claims ("100% ready", "flawless", "zero bugs"). Use factual, evidence-based statements.
+8. **Zero Stubs Policy**:
    - Maintain production-grade completeness across all contracts, schemas, and reports.
