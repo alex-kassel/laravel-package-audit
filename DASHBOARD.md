@@ -13,7 +13,7 @@ Automated by the [Lead Audit Orchestrator](orchestrator.md) following the [Larav
 | `alex-kassel/laravel-domain-core` | 2026-08-25 19:44 | `2.0.0` | 🟢 READY | 0 | 0 | 0 | 0 | [RELEASE-GATE.md](runs/alex-kassel/laravel-domain-core/latest/RELEASE-GATE.md) |
 | `alex-kassel/scraper-core` | 2026-08-25 22:25 | `0.0.1` | 🟢 READY | 0 | 0 | 0 | 0 | [RELEASE-GATE.md](runs/alex-kassel/scraper-core/latest/RELEASE-GATE.md) |
 | `alex-kassel/laravel-actionable-diagnostics` | 2026-08-26 00:36 | `1.0.2` | 🟢 READY | 0 | 0 | 0 | 0 | [RELEASE-GATE.md](runs/alex-kassel/laravel-actionable-diagnostics/latest/RELEASE-GATE.md) |
-| `alex-kassel/history-engine` | 2026-08-26 01:43 | `1.2.0` | 🔴 BLOCKED | 2 | 1 | 27 | 1 | [decisions.md](runs/alex-kassel/history-engine/latest/decisions.md) |
+| `alex-kassel/history-engine` | 2026-08-26 01:50 | `1.2.0` | 🟢 READY | 0 | 0 | 0 | 0 | [RELEASE-GATE.md](runs/alex-kassel/history-engine/latest/RELEASE-GATE.md) |
 
 ---
 
