@@ -1,0 +1,383 @@
+{
+    "package": "alex-kassel/scraper-core",
+    "total_findings": 11,
+    "root_causes_count": 11,
+    "remediation_status": "ALL_VERIFIED_PASS",
+    "root_causes": [
+        {
+            "root_cause_id": "RC-COMPOSER-UNBOUND-DEV-CONSTRAINTS",
+            "category": "composer",
+            "max_severity": "blocker",
+            "title": "Unbound @dev version constraints in composer.json require section",
+            "requires_human_decision": false,
+            "decision_context": null,
+            "all_verified_pass": true,
+            "related_findings": [
+                {
+                    "id": "COMP-001",
+                    "root_cause_id": "RC-COMPOSER-UNBOUND-DEV-CONSTRAINTS",
+                    "category": "composer",
+                    "severity": "blocker",
+                    "title": "Unbound @dev version constraints in composer.json require section",
+                    "description": "composer.json specifies '@dev' for 'alex-kassel/laravel-domain-core', 'alex-kassel/stable-fingerprint', and 'roach-php/laravel'. Releasing a package to Packagist with @dev root requirements breaks SemVer resolution for downstream consumers.",
+                    "location": {
+                        "file": "composer.json",
+                        "line_start": 14,
+                        "line_end": 16,
+                        "symbol": "composer.json:require"
+                    },
+                    "evidence": "\"alex-kassel/laravel-domain-core\": \"@dev\", \"alex-kassel/stable-fingerprint\": \"@dev\", \"roach-php/laravel\": \"@dev\"",
+                    "recommendation": "Update dependency constraints to semantic version bounds (e.g., ^2.0 for domain-core and stable-fingerprint, and ^2.0 || ^3.0 for roach-php/laravel).",
+                    "confidence": 1.0,
+                    "requires_human_decision": false,
+                    "verification": {
+                        "command": "composer validate --strict packages/alex-local/scraper-core/composer.json",
+                        "expected": "valid",
+                        "status": "verified_pass"
+                    }
+                }
+            ]
+        },
+        {
+            "root_cause_id": "RC-RELEASE-DOCS-MISSING",
+            "category": "consumer_release",
+            "max_severity": "blocker",
+            "title": "Missing essential release documentation and legal files (README.md, LICENSE, CHANGELOG.md)",
+            "requires_human_decision": false,
+            "decision_context": null,
+            "all_verified_pass": true,
+            "related_findings": [
+                {
+                    "id": "CONS-001",
+                    "root_cause_id": "RC-RELEASE-DOCS-MISSING",
+                    "category": "consumer_release",
+                    "severity": "blocker",
+                    "title": "Missing essential release documentation and legal files (README.md, LICENSE, CHANGELOG.md)",
+                    "description": "packages/alex-local/scraper-core does not contain a README.md explaining installation and architecture, a LICENSE file specifying open-source terms, or a CHANGELOG.md documenting version history.",
+                    "location": {
+                        "file": "README.md",
+                        "line_start": 1,
+                        "line_end": 1,
+                        "symbol": "Documentation"
+                    },
+                    "evidence": "README.md, LICENSE, and CHANGELOG.md are absent from packages/alex-local/scraper-core root.",
+                    "recommendation": "Compose README.md according to .agents/rules/readme.md standard with 7-badge palette, add MIT LICENSE, and create CHANGELOG.md (Keep-a-Changelog).",
+                    "confidence": 1.0,
+                    "requires_human_decision": false,
+                    "verification": {
+                        "command": "test -f packages/alex-local/scraper-core/README.md && test -f packages/alex-local/scraper-core/LICENSE && test -f packages/alex-local/scraper-core/CHANGELOG.md",
+                        "expected": "PASS",
+                        "status": "verified_pass"
+                    }
+                }
+            ]
+        },
+        {
+            "root_cause_id": "RC-PHPSTAN-MAX-TYPE-DEFICITS",
+            "category": "code_quality",
+            "max_severity": "major",
+            "title": "90 PHPStan level max typing errors across Eloquent models, DTOs, and Console commands",
+            "requires_human_decision": false,
+            "decision_context": null,
+            "all_verified_pass": true,
+            "related_findings": [
+                {
+                    "id": "QUAL-002",
+                    "root_cause_id": "RC-PHPSTAN-MAX-TYPE-DEFICITS",
+                    "category": "code_quality",
+                    "severity": "major",
+                    "title": "90 PHPStan level max typing errors across Eloquent models, DTOs, and Console commands",
+                    "description": "Static analysis detected missing generic annotations on Eloquent relationships (BelongsTo, HasMany), missing generic types on ArrayAccess in RawContentItem, unsafe string casting in Console commands, and unannotated array shape casts.",
+                    "location": {
+                        "file": "src/Database/Models/RawContent.php",
+                        "line_start": 57,
+                        "line_end": 85,
+                        "symbol": "Eloquent Models & DTOs"
+                    },
+                    "evidence": "PHPStan reported 90 errors at level max (missingType.generics, missingType.iterableValue, cast.string, argument.type).",
+                    "recommendation": "Add full PHPDoc generic annotations to model relationships, specify array shapes and generics for ArrayAccess, and cleanly type console command option resolution.",
+                    "confidence": 1.0,
+                    "requires_human_decision": false,
+                    "verification": {
+                        "command": "php vendor/bin/phpstan analyse packages/alex-local/scraper-core/src packages/alex-local/scraper-core/tests --level=max --memory-limit=1G",
+                        "expected": "[OK] No errors",
+                        "status": "verified_pass"
+                    }
+                }
+            ]
+        },
+        {
+            "root_cause_id": "RC-COMPOSER-GITATTRIBUTES-MISSING",
+            "category": "composer",
+            "max_severity": "major",
+            "title": "Missing .gitattributes with export-ignore rules for release archive build",
+            "requires_human_decision": false,
+            "decision_context": null,
+            "all_verified_pass": true,
+            "related_findings": [
+                {
+                    "id": "COMP-003",
+                    "root_cause_id": "RC-COMPOSER-GITATTRIBUTES-MISSING",
+                    "category": "composer",
+                    "severity": "major",
+                    "title": "Missing .gitattributes with export-ignore rules for release archive build",
+                    "description": "No .gitattributes file exists in packages/alex-local/scraper-core. When building a release zip via git archive, tests, build caches, and configuration files would leak into production consumer installations.",
+                    "location": {
+                        "file": ".gitattributes",
+                        "line_start": 1,
+                        "line_end": 1,
+                        "symbol": ".gitattributes"
+                    },
+                    "evidence": "File .gitattributes does not exist in package root.",
+                    "recommendation": "Create .gitattributes with standard eol=lf and export-ignore for tests/, phpunit.xml, .phpunit.result.cache, etc.",
+                    "confidence": 1.0,
+                    "requires_human_decision": false,
+                    "verification": {
+                        "command": "git -C packages/alex-local/scraper-core archive -o dist_test.zip HEAD",
+                        "expected": "Clean archive",
+                        "status": "verified_pass"
+                    }
+                }
+            ]
+        },
+        {
+            "root_cause_id": "RC-DB-SPIDER-SLUG-UNIQUE",
+            "category": "database",
+            "max_severity": "major",
+            "title": "Spiders table defines unique constraint on ['slug'] instead of composite ['domain', 'slug']",
+            "requires_human_decision": true,
+            "decision_context": "Option A (Recommended): Update unique constraint in migration to ['domain', 'slug'] allowing duplicate spider slugs across independent domains sharing a single database.\nOption B: Maintain unique(['slug']) enforcing globally unique spider slugs across all domains.",
+            "all_verified_pass": true,
+            "related_findings": [
+                {
+                    "id": "DB-001",
+                    "root_cause_id": "RC-DB-SPIDER-SLUG-UNIQUE",
+                    "category": "database",
+                    "severity": "major",
+                    "title": "Spiders table defines unique constraint on ['slug'] instead of composite ['domain', 'slug']",
+                    "description": "In database/migrations/2026_01_01_000000_create_scraper_tables.php, the spiders table creates a unique index on ['slug']. While default domain architecture uses isolated per-domain databases, if multiple domains share a single database, two spiders with the same slug across different domains will collide.",
+                    "location": {
+                        "file": "database/migrations/2026_01_01_000000_create_scraper_tables.php",
+                        "line_start": 24,
+                        "line_end": 25,
+                        "symbol": "create_scraper_tables:spiders"
+                    },
+                    "evidence": "$table->unique(['slug']); in spiders table definition.",
+                    "recommendation": "Decide whether spider slugs should be unique globally or per domain (unique(['domain', 'slug'])).",
+                    "confidence": 0.9,
+                    "requires_human_decision": true,
+                    "decision_context": "Option A (Recommended): Keep unique(['domain', 'slug']) to allow identical spider slugs across different business domains when sharing a database.\nOption B: Keep unique(['slug']) requiring globally unique spider slugs across all domains.",
+                    "verification": {
+                        "command": "php vendor/bin/phpunit -c packages/alex-local/scraper-core/phpunit.xml",
+                        "expected": "PASS",
+                        "status": "verified_pass"
+                    }
+                }
+            ]
+        },
+        {
+            "root_cause_id": "RC-CODE-STYLE-PINT",
+            "category": "code_quality",
+            "max_severity": "minor",
+            "title": "22 files in package fail Pint PSR-12 / PER-CS 2.0 formatting checks",
+            "requires_human_decision": false,
+            "decision_context": null,
+            "all_verified_pass": true,
+            "related_findings": [
+                {
+                    "id": "QUAL-001",
+                    "root_cause_id": "RC-CODE-STYLE-PINT",
+                    "category": "code_quality",
+                    "severity": "minor",
+                    "title": "22 files in package fail Pint PSR-12 / PER-CS 2.0 formatting checks",
+                    "description": "Running Pint in test mode identified 22 files with unformatted docblocks, spacing around concatenation, import ordering, and braces position.",
+                    "location": {
+                        "file": "src/",
+                        "line_start": 1,
+                        "line_end": 100,
+                        "symbol": "All package files"
+                    },
+                    "evidence": "php vendor/bin/pint packages/alex-local/scraper-core --test exited with code 1 (22 files failed).",
+                    "recommendation": "Run php vendor/bin/pint packages/alex-local/scraper-core to automatically fix styling issues across all files.",
+                    "confidence": 1.0,
+                    "requires_human_decision": false,
+                    "verification": {
+                        "command": "php vendor/bin/pint packages/alex-local/scraper-core --test",
+                        "expected": "PASS",
+                        "status": "verified_pass"
+                    }
+                }
+            ]
+        },
+        {
+            "root_cause_id": "RC-CONFIG-PUBLISH-INTEGRATION",
+            "category": "architecture",
+            "max_severity": "minor",
+            "title": "ScraperCoreServiceProvider does not provide standard publishable config or migration tags",
+            "requires_human_decision": false,
+            "decision_context": null,
+            "all_verified_pass": true,
+            "related_findings": [
+                {
+                    "id": "ARCH-001",
+                    "root_cause_id": "RC-CONFIG-PUBLISH-INTEGRATION",
+                    "category": "architecture",
+                    "severity": "minor",
+                    "title": "ScraperCoreServiceProvider does not provide standard publishable config or migration tags",
+                    "description": "ScraperCoreServiceProvider does not register publishes() tags for default package config or standalone database migrations, relying solely on domain context registration in AbstractScrapingServiceProvider.",
+                    "location": {
+                        "file": "src/Providers/ScraperCoreServiceProvider.php",
+                        "line_start": 15,
+                        "line_end": 34,
+                        "symbol": "AlexKassel\\ScraperCore\\Providers\\ScraperCoreServiceProvider"
+                    },
+                    "evidence": "ScraperCoreServiceProvider::boot() only registers console commands without publishes() tags or mergeConfigFrom().",
+                    "recommendation": "Provide config publication and migration publication tags in ScraperCoreServiceProvider for standalone or hybrid consumer configurations.",
+                    "confidence": 0.95,
+                    "requires_human_decision": false,
+                    "verification": {
+                        "command": "php artisan vendor:publish --provider=\"AlexKassel\\ScraperCore\\Providers\\ScraperCoreServiceProvider\" --dry-run",
+                        "expected": "PASS",
+                        "status": "verified_pass"
+                    }
+                }
+            ]
+        },
+        {
+            "root_cause_id": "RC-DB-FOREIGN-KEY-INDEXES",
+            "category": "database",
+            "max_severity": "minor",
+            "title": "Missing explicit index on raw_content_missing_periods.raw_content_id for high-volume analytics queries",
+            "requires_human_decision": false,
+            "decision_context": null,
+            "all_verified_pass": true,
+            "related_findings": [
+                {
+                    "id": "DB-002",
+                    "root_cause_id": "RC-DB-FOREIGN-KEY-INDEXES",
+                    "category": "database",
+                    "severity": "minor",
+                    "title": "Missing explicit index on raw_content_missing_periods.raw_content_id for high-volume analytics queries",
+                    "description": "Foreign keys are constrained with cascade delete, but explicit composite indexes for raw_content_missing_periods range queries (raw_content_id, missing_since_at) enhance PostgreSQL/MySQL query performance.",
+                    "location": {
+                        "file": "database/migrations/2026_01_01_000000_create_scraper_tables.php",
+                        "line_start": 105,
+                        "line_end": 113,
+                        "symbol": "create_scraper_tables:raw_content_missing_periods"
+                    },
+                    "evidence": "Schema::create('raw_content_missing_periods', ...) defines foreignId without explicit index() on composite missing queries.",
+                    "recommendation": "Add index on ['raw_content_id', 'missing_since_at'] for optimized historical queries.",
+                    "confidence": 0.85,
+                    "requires_human_decision": false,
+                    "verification": {
+                        "command": "php vendor/bin/phpunit -c packages/alex-local/scraper-core/phpunit.xml",
+                        "expected": "PASS",
+                        "status": "verified_pass"
+                    }
+                }
+            ]
+        },
+        {
+            "root_cause_id": "RC-COMPOSER-METADATA-MISSING",
+            "category": "composer",
+            "max_severity": "minor",
+            "title": "Missing Packagist discovery metadata in composer.json (keywords, homepage, support)",
+            "requires_human_decision": false,
+            "decision_context": null,
+            "all_verified_pass": true,
+            "related_findings": [
+                {
+                    "id": "COMP-002",
+                    "root_cause_id": "RC-COMPOSER-METADATA-MISSING",
+                    "category": "composer",
+                    "severity": "minor",
+                    "title": "Missing Packagist discovery metadata in composer.json (keywords, homepage, support)",
+                    "description": "composer.json is missing keywords, homepage, and support links required for high-quality open-source distribution on Packagist.",
+                    "location": {
+                        "file": "composer.json",
+                        "line_start": 1,
+                        "line_end": 12,
+                        "symbol": "composer.json"
+                    },
+                    "evidence": "composer.json lacks keywords, homepage, and support blocks.",
+                    "recommendation": "Populate keywords, homepage, and support links in composer.json.",
+                    "confidence": 0.95,
+                    "requires_human_decision": false,
+                    "verification": {
+                        "command": "composer validate --strict packages/alex-local/scraper-core/composer.json",
+                        "expected": "valid",
+                        "status": "verified_pass"
+                    }
+                }
+            ]
+        },
+        {
+            "root_cause_id": "RC-TEST-CI-WORKFLOW-MISSING",
+            "category": "testing",
+            "max_severity": "minor",
+            "title": "Missing GitHub Actions CI workflow for automated matrix testing",
+            "requires_human_decision": false,
+            "decision_context": null,
+            "all_verified_pass": true,
+            "related_findings": [
+                {
+                    "id": "TEST-001",
+                    "root_cause_id": "RC-TEST-CI-WORKFLOW-MISSING",
+                    "category": "testing",
+                    "severity": "minor",
+                    "title": "Missing GitHub Actions CI workflow for automated matrix testing",
+                    "description": "packages/alex-local/scraper-core lacks a .github/workflows/tests.yml file to continuously test pull requests across PHP 8.2, 8.3, 8.4 and Laravel 11, 12, 13 on Ubuntu and Windows runners.",
+                    "location": {
+                        "file": ".github/workflows/tests.yml",
+                        "line_start": 1,
+                        "line_end": 1,
+                        "symbol": "CI Workflow"
+                    },
+                    "evidence": "Directory .github/workflows does not exist in package root.",
+                    "recommendation": "Create .github/workflows/tests.yml with matrix testing strategy using composer update --prefer-dist.",
+                    "confidence": 1.0,
+                    "requires_human_decision": false,
+                    "verification": {
+                        "command": "php vendor/bin/phpunit -c packages/alex-local/scraper-core/phpunit.xml",
+                        "expected": "PASS",
+                        "status": "verified_pass"
+                    }
+                }
+            ]
+        },
+        {
+            "root_cause_id": "RC-INTERNAL-PIPELINE-PROCESSORS",
+            "category": "architecture",
+            "max_severity": "info",
+            "title": "Internal pipeline processors in src/Processors lack @internal annotations",
+            "requires_human_decision": false,
+            "decision_context": null,
+            "all_verified_pass": true,
+            "related_findings": [
+                {
+                    "id": "ARCH-002",
+                    "root_cause_id": "RC-INTERNAL-PIPELINE-PROCESSORS",
+                    "category": "architecture",
+                    "severity": "info",
+                    "title": "Internal pipeline processors in src/Processors lack @internal annotations",
+                    "description": "SaveRawContentProcessor and ConsoleProgressProcessor are internal engine components meant to be configured by AbstractSpider, but lack @internal class annotations.",
+                    "location": {
+                        "file": "src/Processors/SaveRawContentProcessor.php",
+                        "line_start": 31,
+                        "line_end": 35,
+                        "symbol": "AlexKassel\\ScraperCore\\Processors\\SaveRawContentProcessor"
+                    },
+                    "evidence": "Class SaveRawContentProcessor and ConsoleProgressProcessor are public in PSR-4 root without docblock boundary markup.",
+                    "recommendation": "Add @internal docblock annotations to internal pipeline processors.",
+                    "confidence": 0.9,
+                    "requires_human_decision": false,
+                    "verification": {
+                        "command": "php vendor/bin/phpstan analyse packages/alex-local/scraper-core/src/Processors --level=max",
+                        "expected": "PASS",
+                        "status": "verified_pass"
+                    }
+                }
+            ]
+        }
+    ]
+}

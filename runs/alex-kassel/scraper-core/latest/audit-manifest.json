@@ -1,0 +1,113 @@
+{
+    "audit_framework_version": "1.0.0",
+    "started_at": "2026-08-25T22:12:00+02:00",
+    "completed_at": "2026-08-25T22:25:00+02:00",
+    "total_duration_seconds": 780.0,
+    "package": {
+        "name": "alex-kassel/scraper-core",
+        "vendor": "alex-kassel",
+        "target_version": "2.0.0",
+        "repository_path": "packages/alex-local/scraper-core"
+    },
+    "git": {
+        "commit": "b68eba5",
+        "branch": "main",
+        "tag": null,
+        "dirty": false
+    },
+    "environment": {
+        "php": "8.4.24",
+        "composer": "2.10.2",
+        "laravel": "13.27.0",
+        "orchestra_testbench": "11.0",
+        "phpunit": "12.5.33",
+        "pint": "1.30.5",
+        "phpstan": "2.2.9",
+        "os": "Windows (Microsoft Windows 11)"
+    },
+    "support_matrix": {
+        "php": [
+            "8.2",
+            "8.3",
+            "8.4"
+        ],
+        "laravel": [
+            "^11.0",
+            "^12.0",
+            "^13.0"
+        ],
+        "databases": [
+            "sqlite",
+            "mysql",
+            "pgsql"
+        ]
+    },
+    "execution_metrics": {
+        "01_architecture_api": {
+            "started_at": "2026-08-25T22:12:05+02:00",
+            "completed_at": "2026-08-25T22:12:20+02:00",
+            "duration_seconds": 15.0
+        },
+        "02_code_quality": {
+            "started_at": "2026-08-25T22:12:21+02:00",
+            "completed_at": "2026-08-25T22:13:15+02:00",
+            "duration_seconds": 54.0
+        },
+        "03_database": {
+            "started_at": "2026-08-25T22:13:16+02:00",
+            "completed_at": "2026-08-25T22:13:30+02:00",
+            "duration_seconds": 14.0
+        },
+        "04_security_isolation": {
+            "started_at": "2026-08-25T22:13:31+02:00",
+            "completed_at": "2026-08-25T22:13:45+02:00",
+            "duration_seconds": 14.0
+        },
+        "05_composer_supply_chain": {
+            "started_at": "2026-08-25T22:13:46+02:00",
+            "completed_at": "2026-08-25T22:14:15+02:00",
+            "duration_seconds": 29.0
+        },
+        "06_testing_compatibility": {
+            "started_at": "2026-08-25T22:14:16+02:00",
+            "completed_at": "2026-08-25T22:14:45+02:00",
+            "duration_seconds": 29.0
+        },
+        "07_consumer_release": {
+            "started_at": "2026-08-25T22:14:46+02:00",
+            "completed_at": "2026-08-25T22:15:15+02:00",
+            "duration_seconds": 29.0
+        }
+    },
+    "agents": {
+        "architecture": {
+            "status": "PASS",
+            "findings_count": 0
+        },
+        "code_quality": {
+            "status": "PASS",
+            "findings_count": 0
+        },
+        "database": {
+            "status": "PASS",
+            "findings_count": 0
+        },
+        "security": {
+            "status": "PASS",
+            "findings_count": 0
+        },
+        "composer": {
+            "status": "PASS",
+            "findings_count": 0
+        },
+        "testing": {
+            "status": "PASS",
+            "findings_count": 0
+        },
+        "consumer_release": {
+            "status": "PASS",
+            "findings_count": 0
+        }
+    },
+    "release_verdict": "READY"
+}

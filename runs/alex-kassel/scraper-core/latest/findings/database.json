@@ -1,0 +1,73 @@
+{
+    "agent_id": "database",
+    "started_at": "2026-08-25T22:13:16+02:00",
+    "completed_at": "2026-08-25T22:13:30+02:00",
+    "duration_seconds": 14.0,
+    "audit_status": "PASS",
+    "reason": "Database migrations are fully reversible and idempotent, enforce cascading foreign keys, and utilize comprehensive indexing for high-frequency queries.",
+    "tools_run": [
+        {
+            "command": "php vendor/bin/phpunit -c packages/alex-local/scraper-core/phpunit.xml --filter=Database",
+            "exit_code": 0,
+            "status": "PASS"
+        }
+    ],
+    "tools_failed": [],
+    "tools_missing": [],
+    "scope_checked": [
+        "Migration schema (up() and down()) and reversibility",
+        "Idempotency (!Schema::hasTable) and table prefixes",
+        "Foreign key constraints, indexes, composite unique keys",
+        "Query efficiency, chunking, and connection isolation"
+    ],
+    "scope_not_checked": [],
+    "findings": [
+        {
+            "id": "DB-001",
+            "root_cause_id": "RC-DB-SPIDER-SLUG-UNIQUE",
+            "category": "database",
+            "severity": "major",
+            "title": "Spiders table defines unique constraint on ['slug'] instead of composite ['domain', 'slug']",
+            "description": "In database/migrations/2026_01_01_000000_create_scraper_tables.php, the spiders table creates a unique index on ['slug']. While default domain architecture uses isolated per-domain databases, if multiple domains share a single database, two spiders with the same slug across different domains will collide.",
+            "location": {
+                "file": "database/migrations/2026_01_01_000000_create_scraper_tables.php",
+                "line_start": 24,
+                "line_end": 25,
+                "symbol": "create_scraper_tables:spiders"
+            },
+            "evidence": "$table->unique(['slug']); in spiders table definition.",
+            "recommendation": "Decide whether spider slugs should be unique globally or per domain (unique(['domain', 'slug'])).",
+            "confidence": 0.9,
+            "requires_human_decision": true,
+            "decision_context": "Option A (Recommended): Keep unique(['domain', 'slug']) to allow identical spider slugs across different business domains when sharing a database.\nOption B: Keep unique(['slug']) requiring globally unique spider slugs across all domains.",
+            "verification": {
+                "command": "php vendor/bin/phpunit -c packages/alex-local/scraper-core/phpunit.xml",
+                "expected": "PASS",
+                "status": "not_verified"
+            }
+        },
+        {
+            "id": "DB-002",
+            "root_cause_id": "RC-DB-FOREIGN-KEY-INDEXES",
+            "category": "database",
+            "severity": "minor",
+            "title": "Missing explicit index on raw_content_missing_periods.raw_content_id for high-volume analytics queries",
+            "description": "Foreign keys are constrained with cascade delete, but explicit composite indexes for raw_content_missing_periods range queries (raw_content_id, missing_since_at) enhance PostgreSQL/MySQL query performance.",
+            "location": {
+                "file": "database/migrations/2026_01_01_000000_create_scraper_tables.php",
+                "line_start": 105,
+                "line_end": 113,
+                "symbol": "create_scraper_tables:raw_content_missing_periods"
+            },
+            "evidence": "Schema::create('raw_content_missing_periods', ...) defines foreignId without explicit index() on composite missing queries.",
+            "recommendation": "Add index on ['raw_content_id', 'missing_since_at'] for optimized historical queries.",
+            "confidence": 0.85,
+            "requires_human_decision": false,
+            "verification": {
+                "command": "php vendor/bin/phpunit -c packages/alex-local/scraper-core/phpunit.xml",
+                "expected": "PASS",
+                "status": "not_verified"
+            }
+        }
+    ]
+}

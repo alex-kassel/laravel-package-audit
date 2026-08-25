@@ -1,0 +1,72 @@
+{
+    "agent_id": "architecture",
+    "started_at": "2026-08-25T22:12:05+02:00",
+    "completed_at": "2026-08-25T22:12:20+02:00",
+    "duration_seconds": 15.0,
+    "audit_status": "PASS",
+    "reason": "Scraper core architecture is cleanly decoupled from concrete domains, uses strict service provider registration and ambient context isolation through alex-kassel/laravel-domain-core.",
+    "tools_run": [
+        {
+            "command": "git -C packages/alex-local/scraper-core status",
+            "exit_code": 0,
+            "status": "PASS"
+        }
+    ],
+    "tools_failed": [],
+    "tools_missing": [],
+    "scope_checked": [
+        "Repository architecture and layer separation",
+        "Public API surface (ScraperEngineService, DataSyncService, RawContentCache, AbstractSpider)",
+        "Laravel integration (ScraperCoreServiceProvider, AbstractScrapingServiceProvider)",
+        "Ambient context and execution locking integration"
+    ],
+    "scope_not_checked": [],
+    "findings": [
+        {
+            "id": "ARCH-001",
+            "root_cause_id": "RC-CONFIG-PUBLISH-INTEGRATION",
+            "category": "architecture",
+            "severity": "minor",
+            "title": "ScraperCoreServiceProvider does not provide standard publishable config or migration tags",
+            "description": "ScraperCoreServiceProvider does not register publishes() tags for default package config or standalone database migrations, relying solely on domain context registration in AbstractScrapingServiceProvider.",
+            "location": {
+                "file": "src/Providers/ScraperCoreServiceProvider.php",
+                "line_start": 15,
+                "line_end": 34,
+                "symbol": "AlexKassel\\ScraperCore\\Providers\\ScraperCoreServiceProvider"
+            },
+            "evidence": "ScraperCoreServiceProvider::boot() only registers console commands without publishes() tags or mergeConfigFrom().",
+            "recommendation": "Provide config publication and migration publication tags in ScraperCoreServiceProvider for standalone or hybrid consumer configurations.",
+            "confidence": 0.95,
+            "requires_human_decision": false,
+            "verification": {
+                "command": "php artisan vendor:publish --provider=\"AlexKassel\\ScraperCore\\Providers\\ScraperCoreServiceProvider\" --dry-run",
+                "expected": "PASS",
+                "status": "not_verified"
+            }
+        },
+        {
+            "id": "ARCH-002",
+            "root_cause_id": "RC-INTERNAL-PIPELINE-PROCESSORS",
+            "category": "architecture",
+            "severity": "info",
+            "title": "Internal pipeline processors in src/Processors lack @internal annotations",
+            "description": "SaveRawContentProcessor and ConsoleProgressProcessor are internal engine components meant to be configured by AbstractSpider, but lack @internal class annotations.",
+            "location": {
+                "file": "src/Processors/SaveRawContentProcessor.php",
+                "line_start": 31,
+                "line_end": 35,
+                "symbol": "AlexKassel\\ScraperCore\\Processors\\SaveRawContentProcessor"
+            },
+            "evidence": "Class SaveRawContentProcessor and ConsoleProgressProcessor are public in PSR-4 root without docblock boundary markup.",
+            "recommendation": "Add @internal docblock annotations to internal pipeline processors.",
+            "confidence": 0.9,
+            "requires_human_decision": false,
+            "verification": {
+                "command": "php vendor/bin/phpstan analyse packages/alex-local/scraper-core/src/Processors --level=max",
+                "expected": "PASS",
+                "status": "not_verified"
+            }
+        }
+    ]
+}

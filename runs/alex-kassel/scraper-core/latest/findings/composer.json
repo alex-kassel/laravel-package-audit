@@ -1,0 +1,100 @@
+{
+    "agent_id": "composer",
+    "started_at": "2026-08-25T22:13:46+02:00",
+    "completed_at": "2026-08-25T22:14:15+02:00",
+    "duration_seconds": 29.0,
+    "audit_status": "FAIL",
+    "reason": "Composer manifest contains unbound @dev dependencies, missing distribution metadata, and lacks .gitattributes export-ignore rules.",
+    "tools_run": [
+        {
+            "command": "composer validate --strict packages/alex-local/scraper-core/composer.json",
+            "exit_code": 0,
+            "status": "PASS"
+        },
+        {
+            "command": "composer audit",
+            "exit_code": 0,
+            "status": "PASS"
+        }
+    ],
+    "tools_failed": [],
+    "tools_missing": [],
+    "scope_checked": [
+        "composer.json schema validation and version constraints",
+        "Dependency segregation (require vs require-dev)",
+        "Release artifact hygiene (.gitattributes export-ignore)",
+        "Packagist distribution prerequisites"
+    ],
+    "scope_not_checked": [],
+    "findings": [
+        {
+            "id": "COMP-001",
+            "root_cause_id": "RC-COMPOSER-UNBOUND-DEV-CONSTRAINTS",
+            "category": "composer",
+            "severity": "blocker",
+            "title": "Unbound @dev version constraints in composer.json require section",
+            "description": "composer.json specifies '@dev' for 'alex-kassel/laravel-domain-core', 'alex-kassel/stable-fingerprint', and 'roach-php/laravel'. Releasing a package to Packagist with @dev root requirements breaks SemVer resolution for downstream consumers.",
+            "location": {
+                "file": "composer.json",
+                "line_start": 14,
+                "line_end": 16,
+                "symbol": "composer.json:require"
+            },
+            "evidence": "\"alex-kassel/laravel-domain-core\": \"@dev\", \"alex-kassel/stable-fingerprint\": \"@dev\", \"roach-php/laravel\": \"@dev\"",
+            "recommendation": "Update dependency constraints to semantic version bounds (e.g., ^2.0 for domain-core and stable-fingerprint, and ^2.0 || ^3.0 for roach-php/laravel).",
+            "confidence": 1.0,
+            "requires_human_decision": false,
+            "verification": {
+                "command": "composer validate --strict packages/alex-local/scraper-core/composer.json",
+                "expected": "valid",
+                "status": "not_verified"
+            }
+        },
+        {
+            "id": "COMP-002",
+            "root_cause_id": "RC-COMPOSER-METADATA-MISSING",
+            "category": "composer",
+            "severity": "minor",
+            "title": "Missing Packagist discovery metadata in composer.json (keywords, homepage, support)",
+            "description": "composer.json is missing keywords, homepage, and support links required for high-quality open-source distribution on Packagist.",
+            "location": {
+                "file": "composer.json",
+                "line_start": 1,
+                "line_end": 12,
+                "symbol": "composer.json"
+            },
+            "evidence": "composer.json lacks keywords, homepage, and support blocks.",
+            "recommendation": "Populate keywords, homepage, and support links in composer.json.",
+            "confidence": 0.95,
+            "requires_human_decision": false,
+            "verification": {
+                "command": "composer validate --strict packages/alex-local/scraper-core/composer.json",
+                "expected": "valid",
+                "status": "not_verified"
+            }
+        },
+        {
+            "id": "COMP-003",
+            "root_cause_id": "RC-COMPOSER-GITATTRIBUTES-MISSING",
+            "category": "composer",
+            "severity": "major",
+            "title": "Missing .gitattributes with export-ignore rules for release archive build",
+            "description": "No .gitattributes file exists in packages/alex-local/scraper-core. When building a release zip via git archive, tests, build caches, and configuration files would leak into production consumer installations.",
+            "location": {
+                "file": ".gitattributes",
+                "line_start": 1,
+                "line_end": 1,
+                "symbol": ".gitattributes"
+            },
+            "evidence": "File .gitattributes does not exist in package root.",
+            "recommendation": "Create .gitattributes with standard eol=lf and export-ignore for tests/, phpunit.xml, .phpunit.result.cache, etc.",
+            "confidence": 1.0,
+            "requires_human_decision": false,
+            "verification": {
+                "command": "git -C packages/alex-local/scraper-core archive -o dist_test.zip HEAD",
+                "expected": "Clean archive",
+                "status": "not_verified"
+            }
+        }
+    ]
+}
