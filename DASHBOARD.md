@@ -12,6 +12,7 @@ Automated by the [Lead Audit Orchestrator](orchestrator.md) following the [Larav
 | `alex-kassel/stable-fingerprint` | 2026-08-25 18:43 | `2.0.0` | 🟢 READY | 0 | 0 | 0 | 0 | [RELEASE-GATE.md](runs/alex-kassel/stable-fingerprint/latest/RELEASE-GATE.md) |
 | `alex-kassel/laravel-domain-core` | 2026-08-25 19:44 | `2.0.0` | 🟢 READY | 0 | 0 | 0 | 0 | [RELEASE-GATE.md](runs/alex-kassel/laravel-domain-core/latest/RELEASE-GATE.md) |
 | `alex-kassel/scraper-core` | 2026-08-25 22:25 | `0.0.1` | 🟢 READY | 0 | 0 | 0 | 0 | [RELEASE-GATE.md](runs/alex-kassel/scraper-core/latest/RELEASE-GATE.md) |
+| `alex-kassel/laravel-actionable-diagnostics` | 2026-08-26 00:36 | `1.0.2` | 🟢 READY | 0 | 0 | 0 | 0 | [RELEASE-GATE.md](runs/alex-kassel/laravel-actionable-diagnostics/latest/RELEASE-GATE.md) |
 
 ---
 
