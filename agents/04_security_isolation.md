@@ -56,7 +56,7 @@ Run when available:
 ---
 
 ## 4. Mandatory Rules & Boundaries
-- **Unified Root Vendor Rule**: NEVER run `composer install` inside package subdirectories. Follow [Unified Root `vendor/` & Package Tooling Standard](file:///.agents/rules/architecture.md#3-unified-root-vendor--package-tooling-standard).
+- **Tooling Boundary**: NEVER run `composer install` inside package subdirectories. Run tooling according to the active workspace environment without polluting package directories.
 - **READ-ONLY**: Never attempt destructive exploit payloads or modify code during Phase 1.
 - **Concrete Evidence Required**: Findings MUST contain a demonstrable attack path or clear logic proof. Do not report false alarms merely because a built-in PHP function exists if it is completely safe in context.
 - Assign `root_cause_id: "RC-HOST-ISOLATION-*"` to any finding violating host boundaries.

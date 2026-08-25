@@ -7,7 +7,7 @@ You do NOT perform individual deep code inspections yourself; you manage the lif
 ---
 
 ## 2. Global Audit Philosophy & Contract
-1. **Universal Execution with Monorepo Adapter**: The framework is universal and repository-agnostic. When operating inside a monorepo workspace, agents follow the [Unified Root `vendor/` Standard](file:///.agents/rules/architecture.md#3-unified-root-vendor--package-tooling-standard) for fast local tooling execution, while strictly verifying that the package itself remains 100% self-contained and independently installable.
+1. **Universal Execution with Monorepo Adapter**: The framework is universal and repository-agnostic. When operating inside a monorepo workspace, agents may run tooling from the workspace root using the shared autoloader for fast local tooling execution, while strictly verifying that the package itself remains 100% self-contained and independently installable.
 2. **Evidence over Opinions**: Every finding MUST contain deterministic proof (exact file paths, line numbers, command outputs, or code citations).
 3. **Explicit Uncertainty & Confidence**:
    - `0.90 – 1.00`: Directly verified via deterministic CLI tool / test.
@@ -81,7 +81,7 @@ The orchestrator performs a self-check of the audit framework itself:
    - Comprehensive report: `.audit/runs/<vendor>/<package-name>/<timestamp>/FINAL-REPORT.md`.
    - High-level Release Gate: `.audit/runs/<vendor>/<package-name>/<timestamp>/RELEASE-GATE.md` (`READY` | `CONDITIONAL` | `BLOCKED`).
    - Sync all files to `.audit/runs/<vendor>/<package-name>/latest/`.
-   - Update the package's row in [.audit/DASHBOARD.md](file:///C:/Users/Alex/Development/Herd/packages.dev/.audit/DASHBOARD.md).
+   - Update the package's row in [DASHBOARD.md](DASHBOARD.md).
 
 ---
 
@@ -130,11 +130,17 @@ Phase 2 MUST NOT begin without explicit user confirmation of choices in `.audit/
    - Fix issues step-by-step; never apply speculative or bulk unreviewed changes.
    - Execute the finding's `verification.command` immediately after each fix.
    - Update finding's `verification.status` to `verified_pass` or `verified_fail`.
-3. **Delta-Audit & Regression Check**:
+3. **Atomic Commit Protocol**:
+   - For every discrete defect or logical group fixed and verified:
+     - Stage ONLY the files related to that specific fix in the target package repository.
+     - Create a clean semantic Git commit (`fix(db): ...`, `refactor(api): ...`, `style(types): ...`, `test: ...`).
+     - Never combine unrelated defect fixes into a single bulk commit.
+     - Explicitly report the commit hash, package repository, and changed files to the user.
+4. **Delta-Audit & Regression Check**:
    - Re-run affected specialist audits and static analysis.
    - Verify that no regressions were introduced.
-4. **Release Artifact Verification**:
+5. **Release Artifact Verification**:
    - Verify `.gitattributes` `export-ignore` and clean `git archive` build.
    - Regenerate final `findings.json`, `FINAL-REPORT.md`, and `RELEASE-GATE.md` in the run directory and `latest/`.
-   - Update [.audit/DASHBOARD.md](file:///C:/Users/Alex/Development/Herd/packages.dev/.audit/DASHBOARD.md).
+   - Update [DASHBOARD.md](DASHBOARD.md).
 

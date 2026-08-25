@@ -1,7 +1,7 @@
-# 🛡️ Monorepo Package Audit Dashboard
+# 🛡️ Package Audit Dashboard
 
-Centralized pre-release audit status registry for all local packages in `packages/`.
-Automated by the [Lead Audit Orchestrator](file:///orchestrator.md) following the [Laravel Package Audit Framework](file:///README.md).
+Centralized pre-release audit status registry for packages in the workspace.
+Automated by the [Lead Audit Orchestrator](orchestrator.md) following the [Laravel Package Audit Framework](README.md).
 
 ---
 
@@ -9,12 +9,7 @@ Automated by the [Lead Audit Orchestrator](file:///orchestrator.md) following th
 
 | Package | Last Audited | Target Version | Verdict | Blockers | Critical | Major | Pending Decisions | Latest Report |
 |---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|---|
-| [`alex-kassel/car-subscription`](file:///packages/alex-kassel/car-subscription) | *Not yet audited* | `1.0.0` | ⚪ PENDING | - | - | - | - | - |
-| [`alex-kassel/laravel-domain-core`](file:///packages/alex-kassel/laravel-domain-core) | *Not yet audited* | `1.0.0` | ⚪ PENDING | - | - | - | - | - |
-| [`alex-kassel/notifier`](file:///packages/alex-kassel/notifier) | *Not yet audited* | `1.0.0` | ⚪ PENDING | - | - | - | - | - |
-| [`alex-kassel/sandbox`](file:///packages/alex-kassel/sandbox) | *Not yet audited* | `1.0.0` | ⚪ PENDING | - | - | - | - | - |
-| [`alex-kassel/scraper-core`](file:///packages/alex-kassel/scraper-core) | *Not yet audited* | `1.0.0` | ⚪ PENDING | - | - | - | - | - |
-| [`alex-kassel/stable-fingerprint`](file:///packages/alex-kassel/stable-fingerprint) | *Not yet audited* | `1.0.0` | ⚪ PENDING | - | - | - | - | - |
+| *`<vendor>/<package-name>`* | *Not yet audited* | `1.0.0` | ⚪ PENDING | - | - | - | - | - |
 
 ---
 

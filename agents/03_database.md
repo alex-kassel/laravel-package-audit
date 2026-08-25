@@ -44,15 +44,15 @@ Determine whether the package safely handles schema, migrations, queries, transa
 ---
 
 ## 3. Tools & Execution
-Execute from repository root using unified host `vendor/`:
-- `php artisan test packages/<vendor>/<package-name>/tests/Feature/Database --configuration=packages/<vendor>/<package-name>/phpunit.xml`
+Execute tooling:
+- `php artisan test <package-path>/tests/Feature/Database --configuration=<package-path>/phpunit.xml` (or `./vendor/bin/phpunit -c <package-path>/phpunit.xml`)
 - Migration execution within Testbench / test suite
 - Verify rollback behaviors
 
 ---
 
 ## 4. Mandatory Rules & Boundaries
-- **Unified Root Vendor Rule**: NEVER run `composer install` inside package subdirectories. Follow [Unified Root `vendor/` & Package Tooling Standard](file:///.agents/rules/architecture.md#3-unified-root-vendor--package-tooling-standard).
+- **Tooling Boundary**: NEVER run `composer install` inside package subdirectories. Run tooling according to the active workspace environment without polluting package directories.
 - **READ-ONLY**: Never modify migration files or databases directly during Phase 1.
 - **Nuanced Severity**:
   - Do NOT automatically classify every missing index as a BLOCKER; evaluate based on query frequency and data volume impact.

@@ -45,21 +45,21 @@ Determine whether the package implementation is robust, strongly typed, maintain
 ---
 
 ## 3. Tools & Execution
-Execute from repository root using unified host `vendor/`:
-- `./vendor/bin/pint packages/<vendor>/<package-name> --test`
-- `./vendor/bin/phpstan analyse packages/<vendor>/<package-name>/src --configuration=packages/<vendor>/<package-name>/phpstan.neon` (or Psalm)
+Execute tooling:
+- `./vendor/bin/pint <package-path> --test`
+- `./vendor/bin/phpstan analyse <package-path>/src --configuration=<package-path>/phpstan.neon` (or Psalm)
 - Optional/Advisory: Rector dry-run (advisory only, not an automatic release gate)
 
 Inspect:
-- `packages/<vendor>/<package-name>/phpstan.neon`, `psalm.xml`
-- `packages/<vendor>/<package-name>/phpstan-baseline.neon`
-- `packages/<vendor>/<package-name>/composer.json`
+- `<package-path>/phpstan.neon`, `psalm.xml`
+- `<package-path>/phpstan-baseline.neon`
+- `<package-path>/composer.json`
 
 ---
 
 ## 4. Mandatory Rules & Boundaries
-- **Unified Root Vendor Rule**: NEVER run `composer install` inside package subdirectories. Follow [Unified Root `vendor/` & Package Tooling Standard](file:///.agents/rules/architecture.md#3-unified-root-vendor--package-tooling-standard).
-- **READ-ONLY**: Never run formatters with auto-fix mode (do not run `pint` without `--test`).
+- **Tooling Boundary**: NEVER run `composer install` inside package subdirectories. Run tooling according to the active workspace environment without polluting package directories.
+- **READ-ONLY**: Strictly prohibited from modifying package or host source code during Phase 1 (never run `pint` without `--test`).
 - **Missing Tools Rule**: If static analysis or linting tools are absent or fail to run, record them in `tools_missing` / `tools_failed` and set `audit_status` to `BLOCKED` or `PARTIAL`. Never assume missing tools equal `PASS`.
 - **No Baseline Hiding**: Flag any baseline entry that conceals genuine bugs or typing deficits.
 

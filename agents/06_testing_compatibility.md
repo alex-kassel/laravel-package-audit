@@ -32,19 +32,19 @@ Determine whether package behavior is sufficiently tested and whether declared P
 ---
 
 ## 3. Tools & Execution
-Execute from repository root using the unified host `vendor/`:
-- `php artisan test -c packages/<vendor>/<package-name>/phpunit.xml`
-- `./vendor/bin/phpunit -c packages/<vendor>/<package-name>/phpunit.xml`
+Execute test suite:
+- `./vendor/bin/phpunit -c <package-path>/phpunit.xml`
+- `php artisan test -c <package-path>/phpunit.xml` (when running inside host Laravel)
 - Boundary matrix runs:
-  - CI Matrix: Automated via `.github/workflows/` across PHP and Laravel matrix.
-  - Local Boundary Check: If tested locally, execute without modifying package subdirectories or creating local `vendor/` folders.
+  - CI Matrix: Automated via `.github/workflows/` across declared PHP and Laravel matrix.
+  - Local Boundary Check: If tested locally, execute without modifying package subdirectories or creating unwanted vendor folders.
 - Optional/Advisory: Mutation testing (Infection) and code coverage reporting if configured.
 
 ---
 
 ## 4. Mandatory Rules & Boundaries
-- **Unified Root Vendor Rule**: NEVER run `composer install` inside package subdirectories. Follow [Unified Root `vendor/` & Package Tooling Standard](file:///.agents/rules/architecture.md#3-unified-root-vendor--package-tooling-standard).
-- **Dynamic Autoloader Bootstrap**: Verify that `packages/<vendor>/<package-name>/tests/bootstrap.php` resolves the autoloader dynamically and registers the test namespace via `$autoloader->addPsr4(...)`.
+- **Tooling Boundary**: NEVER run `composer install` inside package subdirectories. Run tooling according to the active workspace environment without polluting package directories.
+- **Dynamic Autoloader Bootstrap**: Verify that `<package-path>/tests/bootstrap.php` (if in monorepo) or standard composer autoloader resolves dynamically and registers test namespaces.
 - **READ-ONLY**: Never modify package test files or assertions during Phase 1.
 - **Evidence-Based Compatibility**: Do NOT claim compatibility merely because `composer.json` declares it; compatibility must be demonstrated through test execution.
 - **Matrix Failure Distinction**: Explicitly distinguish between genuine package defects and local environment tool unavailability.

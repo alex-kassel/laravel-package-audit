@@ -61,7 +61,7 @@ Use available:
 ---
 
 ## 4. Mandatory Rules & Boundaries
-- **Unified Root Vendor Rule**: NEVER run `composer install` inside package subdirectories. Follow [Unified Root `vendor/` & Package Tooling Standard](file:///.agents/rules/architecture.md#3-unified-root-vendor--package-tooling-standard).
+- **Tooling Boundary**: NEVER run `composer install` inside package subdirectories. Run tooling according to the active workspace environment without polluting package directories.
 - **READ-ONLY**: Strictly prohibited from modifying package or host source code during Phase 1.
 - **Evidence-Based**: Cite exact file paths, line numbers, and symbol names for every finding.
 - **DO NOT**:

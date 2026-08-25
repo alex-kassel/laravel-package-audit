@@ -42,21 +42,21 @@ Determine whether the package is correctly declared, installable, reproducible, 
 ---
 
 ## 3. Tools & Execution
-Execute from repository root:
-- `composer validate --strict packages/<vendor>/<package-name>/composer.json`
+Execute tooling:
+- `composer validate --strict <package-path>/composer.json`
 - `composer audit`
 - `composer check-platform-reqs`
 - `composer-require-checker` (if installed)
 - Distribution archive inspection:
   ```bash
-  git -C packages/<vendor>/<package-name> archive -o dist_test.zip HEAD && tar -tf packages/<vendor>/<package-name>/dist_test.zip | grep -E "tests/|\.github|\.env|\.audit"
+  git -C <package-path> archive -o dist_test.zip HEAD && tar -tf <package-path>/dist_test.zip | grep -E "tests/|\.github|\.env|\.audit"
   ```
   *(remove `dist_test.zip` immediately after test)*
 
 ---
 
 ## 4. Mandatory Rules & Boundaries
-- **Unified Root Vendor Rule**: NEVER run `composer install` or create `vendor/` directories inside the package directory. Audits adhere to [Unified Root `vendor/` Standard](file:///.agents/rules/architecture.md#3-unified-root-vendor--package-tooling-standard).
+- **Tooling Boundary**: NEVER run `composer install` inside package subdirectories. Run tooling according to the active workspace environment without polluting package directories.
 - **READ-ONLY**: Never alter `composer.json` or git tags during Phase 1.
 - Distinguish library packaging conventions from application requirements.
 
