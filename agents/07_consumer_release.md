@@ -30,10 +30,12 @@ Determine whether the package can actually be installed, configured, understood,
   - Official Audit Verification Badge linked to `RELEASE-GATE.md`.
   - Troubleshooting and upgrade path guides.
 - **Standard Legal & Release Documents**:
-  - `RELEASE-GATE.md`: Certified audit pass summary referencing the framework.
+  - `RELEASE-GATE.md`: Certified audit pass summary referencing the framework and stating the exact realistic target release version.
   - `LICENSE`: Valid OSI-approved license (e.g. MIT, Apache-2.0, BSD-3-Clause).
-  - `CHANGELOG.md`: Structured changelog (Keep-a-Changelog standard) documenting changes across releases.
+  - `CHANGELOG.md`: Structured changelog (Keep-a-Changelog standard) documenting changes under the target version (e.g. `[0.0.1]` for first unreleased package; do NOT blindly inflate version to `2.0.0` or match external dependency versions).
   - `CONTRIBUTING.md` / `SECURITY.md` (if applicable).
+- **Target Release Version Verification**:
+  - Verify that the target release version in `RELEASE-GATE.md`, `CHANGELOG.md`, and `audit-manifest.json` matches actual git tag history (or starts at `0.0.1` for brand new packages). Version numbers must never be copied from template defaults or upstream dependencies.
 
 ### 3. Developer Experience (DX) & Ergonomics
 - Intuitive, idiomatic API design following Laravel conventions.

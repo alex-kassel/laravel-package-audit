@@ -66,7 +66,11 @@ If any essential audit tool is absent from the workspace (for example, `vendor/b
    - `reports/` (human-readable Markdown from agents)
 4. Record metadata in `.audit/runs/<vendor>/<package-name>/<YYYY-MM-DD_HH-mm-ss>/audit-manifest.json`:
    - Package name, vendor, commit SHA, branch.
-   - Latest release tag / version resolved dynamically via `git tag -l` or `git describe --tags` (never hardcode `1.0.0`).
+   - **Target Release Version Determination (STRICT SEMVER RESOLUTION)**:
+     - Check repository git tags: `git tag -l --sort=-v:refname`.
+     - If previous tags exist: calculate the next target release version according to change scope (patch/minor/major) or user instruction.
+     - **If NO tags exist (new / unreleased package)**: The default target release version MUST be initialized at `0.0.1` (or `0.1.0` if specified).
+     - **STRICT PROHIBITION**: NEVER blindly copy version numbers from dependency packages (e.g. requiring `laravel-domain-core: ^2.0` does NOT make the target package `v2.0.0`) and NEVER keep template placeholder versions like `2.0.0` or `1.0.0`.
    - PHP version, Composer version, Laravel/Testbench version, OS.
    - Declared support matrix from `composer.json` (PHP, Laravel, supported DB engines).
    - Audit start timestamp.

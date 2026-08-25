@@ -3,7 +3,7 @@
 - **Date:** 2026-08-25
 - **Audit Framework Version:** `2.0.0`
 - **Target Package:** [`alex-kassel/scraper-core`](file:///packages/alex-local/scraper-core)
-- **Target Release Version:** `v2.0.0`
+- **Target Release Version:** `v0.0.1`
 - **Final Release Verdict:** 🟢 **READY FOR RELEASE**
 
 ---
@@ -53,5 +53,5 @@ All 11 findings identified in Phase 1 have been remediated in Phase 2 with deter
 
 ## 4. Release Gate Certification
 
-The package is certified as 🟢 **READY FOR RELEASE** as `v2.0.0`.
+The package is certified as 🟢 **READY FOR RELEASE** as `v0.0.1`.
 Detailed certification: [`RELEASE-GATE.md`](RELEASE-GATE.md).

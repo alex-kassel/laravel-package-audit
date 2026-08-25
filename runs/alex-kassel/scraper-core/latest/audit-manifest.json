@@ -6,7 +6,7 @@
     "package": {
         "name": "alex-kassel/scraper-core",
         "vendor": "alex-kassel",
-        "target_version": "2.0.0",
+        "target_version": "0.0.1",
         "repository_path": "packages/alex-local/scraper-core"
     },
     "git": {

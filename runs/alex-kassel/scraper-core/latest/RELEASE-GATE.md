@@ -8,8 +8,8 @@
 ## 📋 Executive Release Summary
 
 - **Package Name:** `alex-kassel/scraper-core`
-- **Target Release Version:** `v2.0.0`
-- **Target Branch / Commit:** `main` (`b68eba5`)
+- **Target Release Version:** `v0.0.1`
+- **Target Branch / Commit:** `main` (`26050d5`)
 - **Release Verdict:** 🟢 **READY FOR RELEASE**
 - **Audit Framework Version:** `2.0.0`
 - **Certification Date:** 2026-08-25
@@ -56,7 +56,7 @@ OK (10 tests, 39 assertions)
 ✓ composer validate --strict: Valid composer.json manifest.
 ✓ composer audit: 0 known security vulnerabilities detected.
 ✓ .gitattributes: tests/, .github/, phpunit.xml, and composer.lock excluded from release zip.
-✓ CHANGELOG.md: Structured Keep-a-Changelog compliant release notes for v2.0.0.
+✓ CHANGELOG.md: Structured Keep-a-Changelog compliant release notes for v0.0.1.
 ```
 
 ---
@@ -67,7 +67,7 @@ OK (10 tests, 39 assertions)
 {
   "audit_run": ".audit/runs/alex-kassel/scraper-core/latest/",
   "package": "alex-kassel/scraper-core",
-  "version": "2.0.0",
+  "version": "0.0.1",
   "framework": "https://github.com/alex-kassel/laravel-package-audit",
   "environment": {
     "php": "8.4.24",
