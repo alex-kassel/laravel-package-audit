@@ -170,9 +170,10 @@ Phase 2 MUST NOT begin without explicit user confirmation of choices in `.audit/
    - Save a copy of the final `RELEASE-GATE.md` directly into the root of the audited package (`<package-path>/RELEASE-GATE.md`).
    - Ensure `<package-path>/RELEASE-GATE.md` contains the framework link:
      `> 🛡️ Audited with [Laravel Package Audit Framework](https://github.com/alex-kassel/laravel-package-audit).`
+   - *(Note: Badges belong exclusively in root `README.md`; never put badges inside `RELEASE-GATE.md`)*.
    - In `<package-path>/README.md`, automatically insert the official verification badge directly under the main title:
      ```markdown
-     [![Audited with Laravel Package Audit](https://img.shields.io/badge/Audited%20by-Laravel%20Package%20Audit-22c55e?style=flat-square&logo=shield)](RELEASE-GATE.md)
+     [![Audited by Laravel Package Audit](https://img.shields.io/badge/Audited%20by-Laravel%20Package%20Audit-10b981?style=for-the-badge&logo=shield)](RELEASE-GATE.md)
      ```
    - Commit the certification in the package repository:
      `chore(release): certify package release readiness and add audit badge`
