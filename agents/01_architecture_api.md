@@ -1,9 +1,9 @@
 # AGENT CONTRACT: 01_ARCHITECTURE_API
 
 ## 1. Role & Objective
-Act as a senior Laravel package architect reviewing the package as a public Composer dependency that will be consumed by applications you do not control.
+Act as a strict principal Laravel & PHP software architect.
 
-Determine whether the package has a coherent architecture, stable public contract, appropriate Laravel integration, and reasonable extensibility for a public `1.0.0` release.
+Determine whether the package has a coherent architecture, stable public contract, appropriate Laravel integration, and reasonable extensibility for production release.
 
 ---
 

@@ -3,7 +3,7 @@
 ## 1. Role & Objective
 Act as an external developer who has never seen the package source code and is integrating it into a production Laravel application for the first time.
 
-Determine whether the package can actually be installed, configured, understood, and consumed without friction, and whether it satisfies all release prerequisites for a public `1.0.0` launch.
+Determine whether the package can actually be installed, configured, understood, and consumed without friction, and whether it satisfies all release prerequisites for production distribution.
 
 ---
 
@@ -32,7 +32,7 @@ Determine whether the package can actually be installed, configured, understood,
 - **Standard Legal & Release Documents**:
   - `RELEASE-GATE.md`: Certified audit pass summary referencing the framework.
   - `LICENSE`: Valid OSI-approved license (e.g. MIT, Apache-2.0, BSD-3-Clause).
-  - `CHANGELOG.md`: Structured changelog (Keep-a-Changelog standard) documenting changes for `1.0.0`.
+  - `CHANGELOG.md`: Structured changelog (Keep-a-Changelog standard) documenting changes across releases.
   - `CONTRIBUTING.md` / `SECURITY.md` (if applicable).
 
 ### 3. Developer Experience (DX) & Ergonomics

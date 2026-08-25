@@ -9,7 +9,7 @@ Automated by the [Lead Audit Orchestrator](orchestrator.md) following the [Larav
 
 | Package | Last Audited | Target Version | Verdict | Blockers | Critical | Major | Pending Decisions | Latest Report |
 |---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|---|
-| `alex-kassel/stable-fingerprint` | 2026-08-25 18:43 | `1.0.0` | 🟢 READY | 0 | 0 | 0 | 0 | [RELEASE-GATE.md](runs/alex-kassel/stable-fingerprint/latest/RELEASE-GATE.md) |
+| `alex-kassel/stable-fingerprint` | 2026-08-25 18:43 | `2.0.0` | 🟢 READY | 0 | 0 | 0 | 0 | [RELEASE-GATE.md](runs/alex-kassel/stable-fingerprint/latest/RELEASE-GATE.md) |
 
 ---
 

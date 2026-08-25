@@ -5,7 +5,7 @@
   "total_duration_seconds": null,
   "package": {
     "name": "vendor/package-name",
-    "target_version": "1.0.0"
+    "target_version": "x.y.z"
   },
   "git": {
     "commit": "HEAD_COMMIT_SHA",
