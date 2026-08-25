@@ -1,4 +1,9 @@
-# 🚀 Laravel Package Audit Framework (`.audit` v1.0.0)
+# 🚀 Laravel Package Audit Framework
+
+[![Latest Version](https://img.shields.io/github/v/tag/alex-kassel/laravel-package-audit?style=for-the-badge&logo=github&logoColor=white&label=version&color=f59e0b)](https://github.com/alex-kassel/laravel-package-audit/releases)
+[![Laravel Ecosystem](https://img.shields.io/badge/Laravel-11%20%7C%2012%20%7C%2013-e11d48?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com)
+[![PHP Platform](https://img.shields.io/badge/PHP-8.2%20%7C%208.3%20%7C%208.4-777bb4?style=for-the-badge&logo=php&logoColor=white)](https://php.net)
+[![License](https://img.shields.io/badge/License-MIT-0d9488?style=for-the-badge)](LICENSE)
 
 > **An industrial, 360-degree, evidence-based release gating and audit framework for packages in the Laravel / Composer ecosystem preparing for a public `1.0.0` or stable Packagist release.**
 
@@ -11,9 +16,10 @@
 - [The 2-Phase Lifecycle](#-the-2-phase-lifecycle)
 - [Quickstart Guide for Developers](#-quickstart-guide-for-developers)
 - [Release Gate Verdicts](#-release-gate-verdicts)
-- [Monorepo & Root Vendor Integration](#-monorepo--root-vendor-integration)
+- [Package Audit Badge & Release Certification](#-package-audit-badge--release-certification)
+- [Execution Modes: Standalone vs Monorepo Workspace](#-execution-modes-standalone-vs-monorepo-workspace)
 - [Directory & Artifact Layout](#-directory--artifact-layout)
-- [Configuration & Schemas](#-configuration--schemas)
+- [License & Attribution](#-license--attribution)
 
 ---
 
@@ -172,7 +178,7 @@ When a package passes all release gates and achieves the 🟢 **`READY`** verdic
 2. The official verification badge is placed in the package's `README.md`:
 
 ```markdown
-[![Audited with Laravel Package Audit](https://img.shields.io/badge/Audited%20by-Laravel%20Package%20Audit-22c55e?style=flat-square&logo=shield)](RELEASE-GATE.md)
+[![Audited by Laravel Package Audit](https://img.shields.io/badge/Audited%20by-Laravel%20Package%20Audit-10b981?style=for-the-badge&logo=shield)](RELEASE-GATE.md)
 ```
 
 **Transparent Two-Step Verification Flow**:
