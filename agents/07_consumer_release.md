@@ -65,8 +65,8 @@ Execute from repository root:
 ---
 
 ## 5. Output Deliverables
-1. Machine-readable JSON: `.audit/findings/consumer_release.json` (adhering to `schema/agent-report.schema.json` with `agent_id: "consumer_release"`).
-2. Human-readable Markdown: `.audit/reports/consumer_release.md`.
+1. Machine-readable JSON: `<run-dir>/findings/consumer_release.json` (adhering to `schema/agent-report.schema.json` with `agent_id: "consumer_release"`).
+2. Human-readable Markdown: `<run-dir>/reports/consumer_release.md`.
 
 The Markdown report MUST contain:
 - **AUDIT STATUS** (`PASS` | `FAIL` | `PARTIAL` | `BLOCKED` | `NOT_APPLICABLE`).

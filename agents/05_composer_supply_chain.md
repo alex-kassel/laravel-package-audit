@@ -63,8 +63,8 @@ Execute tooling:
 ---
 
 ## 5. Output Deliverables
-1. Machine-readable JSON: `.audit/findings/composer.json` (adhering to `schema/agent-report.schema.json` with `agent_id: "composer"`).
-2. Human-readable Markdown: `.audit/reports/composer.md`.
+1. Machine-readable JSON: `<run-dir>/findings/composer.json` (adhering to `schema/agent-report.schema.json` with `agent_id: "composer"`).
+2. Human-readable Markdown: `<run-dir>/reports/composer.md`.
 
 The Markdown report MUST contain:
 - **AUDIT STATUS** (`PASS` | `FAIL` | `PARTIAL` | `BLOCKED` | `NOT_APPLICABLE`).

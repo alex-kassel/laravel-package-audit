@@ -66,8 +66,8 @@ Inspect:
 ---
 
 ## 5. Output Deliverables
-1. Machine-readable JSON: `.audit/findings/code_quality.json` (adhering to `schema/agent-report.schema.json` with `agent_id: "code_quality"`).
-2. Human-readable Markdown: `.audit/reports/code_quality.md`.
+1. Machine-readable JSON: `<run-dir>/findings/code_quality.json` (adhering to `schema/agent-report.schema.json` with `agent_id: "code_quality"`).
+2. Human-readable Markdown: `<run-dir>/reports/code_quality.md`.
 
 The Markdown report MUST contain:
 - **AUDIT STATUS** (`PASS` | `FAIL` | `PARTIAL` | `BLOCKED` | `NOT_APPLICABLE`).

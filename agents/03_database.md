@@ -61,8 +61,8 @@ Execute tooling:
 ---
 
 ## 5. Output Deliverables
-1. Machine-readable JSON: `.audit/findings/database.json` (adhering to `schema/agent-report.schema.json` with `agent_id: "database"`).
-2. Human-readable Markdown: `.audit/reports/database.md`.
+1. Machine-readable JSON: `<run-dir>/findings/database.json` (adhering to `schema/agent-report.schema.json` with `agent_id: "database"`).
+2. Human-readable Markdown: `<run-dir>/reports/database.md`.
 
 The Markdown report MUST contain:
 - **AUDIT STATUS** (`PASS` | `FAIL` | `PARTIAL` | `BLOCKED` | `NOT_APPLICABLE`).
