@@ -65,26 +65,30 @@ The framework delegates audit tasks across 7 isolated specialist domains:
 | Agent | Focus Domain | Key Checks & Deterministic Tools |
 |---|---|---|
 | **01 Architecture & API** | Public contract stability & Laravel integration | ServiceProvider `register()` vs `boot()`, container bindings, facades, DTOs, `@internal` encapsulation, SemVer boundaries. |
-| **02 Code Quality** | Static analysis, strict typing & linting | `declare(strict_types=1);`, return/param types, Pint (`pint --test`), PHPStan (Level 8+), audit of `phpstan-baseline.neon`. |
+| **02 Code Quality** | Static analysis, strict typing & linting | `declare(strict_types=1);`, return/param types, Pint (`pint --test`), PHPStan (highest reasonable strictness), baseline audit. |
 | **03 Database** | Migrations, DDL, queries & concurrency | `up()`/`down()` reversibility, table prefix collisions, index coverage, N+1 queries, transactions (`DB::transaction()`), multi-DB support. |
 | **04 Security & Isolation** | Vulnerabilities & host app containment | Container hijacking prevention, global config immutability, SQL/Command injection, unescaped Blade output, `composer audit`. |
 | **05 Composer & Supply Chain** | Manifest, dependencies & distribution zip | `composer validate --strict`, dependency segregation (`require` vs `require-dev`), `.gitattributes export-ignore`, `git archive` release check. |
 | **06 Testing & Matrix** | Test quality & boundary compatibility | PHPUnit/Pest with Testbench, dynamic `tests/bootstrap.php`, boundary matrix testing (`prefer-lowest` vs `prefer-stable`). |
-| **07 Consumer Release** | First-party integration & documentation | Simulated fresh-install smoke test, package auto-discovery, `vendor:publish` validation, `README.md` code snippet accuracy, `CHANGELOG.md`, `LICENSE`. |
+| **07 Consumer Release** | First-party integration & documentation | Isolated fresh-install smoke test (no parent vendor leakage), auto-discovery, `vendor:publish`, README code accuracy, `CHANGELOG.md`, `LICENSE`. |
 
 ---
 
 ## 🔄 The 2-Phase Lifecycle
 
-The audit framework operates in two distinct phases to guarantee **zero unintended code modifications**:
+The audit framework operates in two distinct phases preceded by a bootstrap self-check:
 
 ```mermaid
 flowchart TD
+    subgraph Phase 0 [Phase 0: Bootstrap & Framework Self-Check]
+        S0[Verify Framework Integrity: schemas, contracts, templates] --> A[Environment Snapshot & Manifest]
+    end
+
     subgraph Phase 1 [Phase 1: Audit-Only & Read-Only]
-        A[1. Environment Snapshot & Manifest] --> B[2. Run 7 Isolated Specialist Audits]
-        B --> C[3. Validate JSON Schemas & Deduplicate by root_cause_id]
-        C --> D[4. Compile FINAL-REPORT.md & RELEASE-GATE.md]
-        D --> E[5. Generate Human Decision Sheet decisions.md]
+        A --> B[Run 7 Isolated Specialist Audits]
+        B --> C[Validate JSON Schemas & Deduplicate by root_cause_id]
+        C --> D[Compile FINAL-REPORT.md & RELEASE-GATE.md]
+        D --> E[Generate Human Decision Sheet decisions.md]
     end
 
     subgraph Gate [Human Decision Gate]
@@ -111,8 +115,8 @@ Give a simple prompt to your AI coding assistant (Antigravity, Cursor, Claude Co
 > *"Run a full package audit for `packages/<vendor>/<package-name>` strictly according to `.audit/orchestrator.md`. Execute Phase 1 (Audit-Only)."*
 
 The agent will automatically:
-1. Initialize the run directory at `.audit/runs/<vendor>/<package-name>/<timestamp>/`.
-2. Execute all 7 specialist contracts in read-only mode from the repository root.
+1. Conduct Phase 0 Framework Self-Check and initialize `.audit/runs/<vendor>/<package-name>/<timestamp>/`.
+2. Execute all 7 specialist contracts in read-only mode.
 3. Validate and deduplicate findings into `findings.json`.
 4. Generate `FINAL-REPORT.md`, `RELEASE-GATE.md`, `decisions.md`, and update `.audit/DASHBOARD.md`.
 
@@ -153,33 +157,22 @@ Every audit produces a clear, deterministic release verdict:
 
 | Verdict | Meaning | Conditions Required |
 |:---:|---|---|
-| 🟢 **`READY`** | **Package is 100% ready for public `1.0.0` release** | `0` Blockers, `0` Critical defects, all required audits `PASS`, all human decisions resolved, verified compatibility, clean distribution archive. |
+| 🟢 **`READY`** | **No known release-blocking issues were found, and all required verification gates passed** | `0` Blockers, `0` Critical defects, all required audits `PASS`, all human decisions resolved, verified compatibility, clean distribution archive. |
 | 🟡 **`CONDITIONAL`** | **Approved with documented risks or minor pending items** | `0` Blockers, `0` Critical defects, non-critical decisions pending or explicitly accepted architectural tradeoffs. |
 | 🔴 **`BLOCKED`** | **Release MUST NOT proceed** | `>= 1` Blocker or Critical finding, broken Composer install/discovery, fatal security flaw, migration failure, or failed essential audit. |
 
 ---
 
-## 🧩 Monorepo & Root Vendor Integration
+## 🧩 Execution Modes: Standalone vs Monorepo Workspace
 
-To prevent duplicating gigabytes of vendor dependencies across multiple packages in local monorepo development, all audits adhere to the **Unified Root Vendor Standard**:
+The framework is **universal and repository-agnostic**:
 
-1. **Single Central `vendor/`**: Packages share the root application's `vendor/` directory. Never run `composer install` inside package subdirectories.
-2. **Dynamic Autoloader (`tests/bootstrap.php`)**: Every package includes a standard dynamic bootstrap:
-   ```php
-   <?php
-   declare(strict_types=1);
-   $candidates = [__DIR__ . '/../vendor/autoload.php', __DIR__ . '/../../../../vendor/autoload.php'];
-   $autoloader = null;
-   foreach ($candidates as $candidate) {
-       if (file_exists($candidate)) { $autoloader = require $candidate; break; }
-   }
-   if ($autoloader === null) { throw new RuntimeException('Composer autoloader not found.'); }
-   $autoloader->addPsr4('Vendor\\PackageName\\Tests\\', __DIR__);
-   ```
-3. **Root Execution Commands**:
-   - Tests: `php artisan test -c packages/<vendor>/<package-name>/phpunit.xml`
-   - Linting: `./vendor/bin/pint packages/<vendor>/<package-name> --test`
-   - Static Analysis: `./vendor/bin/phpstan analyse packages/<vendor>/<package-name>/src --configuration=packages/<vendor>/<package-name>/phpstan.neon`
+1. **Standalone Package Mode (Default)**:
+   - When auditing a standalone package repository, tools run within the package's own context and isolated dependencies.
+
+2. **Monorepo / Workspace Adapter (Optional)**:
+   - In local monorepo setups (such as Laravel host applications developing multiple internal packages), test runners can optionally use the host root `vendor/` via a dynamic autoloader (`tests/bootstrap.php`) for rapid local iteration.
+   - **Critical Isolation Rule**: Regardless of monorepo tooling, the Consumer Release Agent (Agent 07) MUST verify that the package resolves runtime dependencies independently without leaking undeclared parent packages.
 
 ---
 

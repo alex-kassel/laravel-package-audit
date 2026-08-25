@@ -9,8 +9,11 @@ Determine whether the package can actually be installed, configured, understood,
 
 ## 2. Scope of Investigation
 
-### 1. Fresh Consumer Installation & Discovery
-- **Simulated Installation**: Test installing the package into a clean/host Laravel application using a local Composer path repository (`"type": "path"`).
+### 1. Fresh Consumer Installation & Isolation (CRITICAL)
+- **Isolated Environment**: Test installing the package into a clean, standalone Laravel application using a local Composer path repository (`"type": "path"`).
+- **No Parent Vendor Leakage**: The consumer smoke test MUST NOT accidentally resolve package runtime dependencies from the parent monorepo project's `vendor/`.
+  - All runtime classes consumed by the package MUST be explicitly declared in the package's own `composer.json` (`require`).
+  - An installation into a clean app must resolve dependencies strictly from what the package declares, avoiding false positives where parent dependencies masked missing declarations.
 - **Auto-Discovery**: Verify that Laravel's package auto-discovery (`extra.laravel`) registers the ServiceProvider and Facades without manual intervention.
 - **Resource Publishing**:
   - `php artisan vendor:publish --tag="<package>-config"` (verify config file lands in `config/`).

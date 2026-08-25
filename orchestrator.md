@@ -7,7 +7,7 @@ You do NOT perform individual deep code inspections yourself; you manage the lif
 ---
 
 ## 2. Global Audit Philosophy & Contract
-1. **Unified Root Vendor Architecture**: Audits MUST strictly adhere to the project's [Unified Root `vendor/` & Package Tooling Standard](file:///.agents/rules/architecture.md#3-unified-root-vendor--package-tooling-standard). Never execute `composer install` or create `vendor/` directories inside individual package folders. All test suites, Pint linting, PHPStan analysis, and commands MUST execute from the root repository using the root `vendor/` binaries targeting the package path.
+1. **Universal Execution with Monorepo Adapter**: The framework is universal and repository-agnostic. When operating inside a monorepo workspace, agents follow the [Unified Root `vendor/` Standard](file:///.agents/rules/architecture.md#3-unified-root-vendor--package-tooling-standard) for fast local tooling execution, while strictly verifying that the package itself remains 100% self-contained and independently installable.
 2. **Evidence over Opinions**: Every finding MUST contain deterministic proof (exact file paths, line numbers, command outputs, or code citations).
 3. **Explicit Uncertainty & Confidence**:
    - `0.90 – 1.00`: Directly verified via deterministic CLI tool / test.
@@ -27,9 +27,19 @@ You do NOT perform individual deep code inspections yourself; you manage the lif
 
 ---
 
-## 3. Phase 0: Workspace & Manifest Initialization
-Before running audit agents:
-1. Verify repository clean state (`git status`).
+## 3. Phase 0: Workspace, Self-Check & Manifest Initialization
+Before launching specialist agents:
+
+### 1. Framework Self-Check (Integrity Verification)
+The orchestrator performs a self-check of the audit framework itself:
+- Verify that all 7 agent contracts exist in `agents/` (`01_` through `07_`).
+- Verify that JSON schemas (`schema/finding.schema.json` and `schema/agent-report.schema.json`) are valid Draft-07 JSON.
+- Verify `audit-manifest.template.json` and `DASHBOARD.md` exist.
+- Ensure no contradictory instructions exist between orchestrator and agent contracts.
+*(If the framework itself is corrupt, halt immediately with status `FRAMEWORK_INTEGRITY_FAIL`)*.
+
+### 2. Workspace & Manifest Initialization
+1. Verify package repository clean state (`git status`).
 2. Establish target run directory:
    - Run timestamp directory: `.audit/runs/<vendor>/<package-name>/<YYYY-MM-DD_HH-mm-ss>/`
    - Active mirror directory: `.audit/runs/<vendor>/<package-name>/latest/`
@@ -53,6 +63,7 @@ Before running audit agents:
    - **Agent 05 (Composer & Supply Chain)**: `.audit/agents/05_composer_supply_chain.md`
    - **Agent 06 (Testing & Compatibility)**: `.audit/agents/06_testing_compatibility.md`
    - **Agent 07 (Consumer Experience & Release)**: `.audit/agents/07_consumer_release.md`
+     *(Note: Consumer test MUST NOT accidentally resolve undeclared package runtime dependencies from parent project `vendor/`)*.
 2. **Validate Agent Outputs**:
    - Validate each finding JSON in `runs/<vendor>/<package-name>/<timestamp>/findings/` against `.audit/schema/agent-report.schema.json`.
    - Ensure all finding objects conform to `.audit/schema/finding.schema.json`.
@@ -90,7 +101,7 @@ Before running audit agents:
 │              │ • Only MAJOR / MINOR issues or accepted risks remain    │
 │              │ • Non-critical verification incomplete                  │
 ├──────────────┼─────────────────────────────────────────────────────────┤
-│    READY     │ • 0 Blockers, 0 Criticals                               │
+│    READY     │ • No known release-blocking issues were found           │
 │              │ • All required audit domains PASS                       │
 │              │ • All human decisions in decisions.md resolved          │
 │              │ • Declared compatibility verified                       │

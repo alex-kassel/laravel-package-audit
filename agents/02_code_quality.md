@@ -16,7 +16,7 @@ Determine whether the package implementation is robust, strongly typed, maintain
 - Enums and Value Objects used where appropriate instead of primitive obsession.
 
 ### 2. Static Analysis & Baseline Integrity
-- PHPStan / Psalm configuration and configured strictness level (target Level 8+ where applicable).
+- PHPStan / Psalm configuration and configured strictness level (target the highest reasonable strictness level compatible with the package architecture).
 - Active errors and ignored error rules in configuration.
 - **Baseline Audit**: Inspect `phpstan-baseline.neon`. A baseline must NEVER be used as a mechanism to hide existing defects. Unjustified baseline suppressions must be flagged.
 - DO NOT automatically generate a PHPStan baseline during audit.

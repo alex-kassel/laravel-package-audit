@@ -12,7 +12,7 @@ Welcome to the **Laravel Package Audit Framework** repository. This repository d
 - **Environment Manifest Template**: [`audit-manifest.template.json`](audit-manifest.template.json) — Snapshot format for environment, PHP/Composer/Laravel versions, and support matrix.
 - **Specialized Agent Contracts (`agents/`)**:
   - [`01_architecture_api.md`](agents/01_architecture_api.md): Public API Surface, ServiceProviders, Facades, BC breaks, layer purity.
-  - [`02_code_quality.md`](agents/02_code_quality.md): Strict typing, Pint, PHPStan (Level 8+), baseline integrity, exception correctness.
+  - [`02_code_quality.md`](agents/02_code_quality.md): Strict typing, Pint, PHPStan (highest reasonable strictness), baseline integrity, exception correctness.
   - [`03_database.md`](agents/03_database.md): Migrations, schema isolation, queries, index coverage, transaction safety, multi-DB support.
   - [`04_security_isolation.md`](agents/04_security_isolation.md): Vulnerabilities, injection vectors, host container isolation.
   - [`05_composer_supply_chain.md`](agents/05_composer_supply_chain.md): Manifest validation, dependency segregation, `.gitattributes export-ignore`, release zip check.

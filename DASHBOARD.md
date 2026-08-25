@@ -19,7 +19,7 @@ Automated by the [Lead Audit Orchestrator](file:///orchestrator.md) following th
 ---
 
 ## 🧭 Verdict Legend
-- 🟢 **READY**: All audits PASS, 0 Blockers, 0 Critical, 100% verified compatibility, all human decisions resolved.
+- 🟢 **READY**: No known release-blocking issues were found, and all required verification gates passed.
 - 🟡 **CONDITIONAL**: 0 Blockers, non-critical decisions pending in `decisions.md` or acceptable documented risks.
 - 🔴 **BLOCKED**: >= 1 Blocker or Critical defect, broken installation/discovery, or failed essential audit.
 - ⚪ **PENDING**: Package has not undergone audit yet.
