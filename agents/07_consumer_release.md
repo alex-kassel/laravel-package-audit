@@ -41,8 +41,8 @@ Determine whether the package can actually be installed, configured, understood,
   - Inspect GitHub repository metadata via `gh repo view <vendor>/<package> --json description,homepageUrl,repositoryTopics`:
     - **Description**: MUST match `composer.json` description verbatim.
     - **Homepage/Website**: MUST link to Packagist package page (`https://packagist.org/packages/<vendor>/<package>`).
-    - **Topics**: MUST be set to 3 key domain tags (e.g. `laravel`, `scraping`, `multi-domain`).
-    - If empty or outdated, report findings and provide the exact remediation command (`gh repo edit <vendor>/<package> --description "..." --homepage "..." --add-topic "..."`).
+    - **Topics**: MUST be set to **STRICTLY EXACTLY 3** key domain tags (e.g. `laravel,diagnostics,ai-agent` or `laravel,scraping,multi-domain`). Never exceed or fall below 3 topics.
+    - If empty, outdated, or containing more/less than 3 topics, report findings and provide the exact remediation command (`gh repo edit <vendor>/<package> --description "..." --homepage "..." --remove-topic "..." --add-topic "tag1,tag2,tag3"`).
 
 ### 3. Developer Experience (DX) & Ergonomics
 - Intuitive, idiomatic API design following Laravel conventions.
