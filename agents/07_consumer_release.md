@@ -30,19 +30,22 @@ Determine whether the package can actually be installed, configured, understood,
   - Official Audit Verification Badge linked to `RELEASE-GATE.md` (**MUST be the VERY FIRST badge** at the top of the README, using exact template `[![Audited by Laravel Package Audit](https://img.shields.io/badge/Audited%20by-Laravel%20Package%20Audit-10b981?style=for-the-badge&logo=shield)](RELEASE-GATE.md)`).
   - Troubleshooting and upgrade path guides.
 - **Standard Legal & Release Documents**:
-  - `RELEASE-GATE.md`: Certified audit pass summary referencing the framework and stating the exact realistic target release version.
+  - `RELEASE-GATE.md`: Certified audit pass summary referencing the framework using the **Standard 5-Section Gold Layout**:
+    1. **Header Callout**: `> 🛡️ **Audited with [Laravel Package Audit Framework](https://github.com/alex-kassel/laravel-package-audit)**`
+    2. **Executive Summary Grid**: Table with attributes (`Package Name`, `Target Release Version`, `Target Branch / Commit`, `Release Verdict: 🟢 READY FOR RELEASE`, `Audit Framework Version`, `Certification Date`, `Known Release Blockers`, `Critical Defects`, `Static Analysis Errors`, `Automated Test Assertions`).
+    3. **360-Degree Domain Assessment Grid**: Full table of all 7 domains (`#`, `Verification Domain`, `Result`, `Deterministic Verification Command & Evidence`).
+    4. **Quality & Verification Scorecard**: Static Analysis output block, PHPUnit CLI test run output block, Supply Chain & Distribution Integrity checklist.
+    5. **Audit Trail & Digital Signature**: JSON block with `audit_run`, `package`, `version`, `commit`, `framework`, `framework_version`, `environment`, and `signature` hash.
   - `LICENSE`: Valid OSI-approved license (e.g. MIT, Apache-2.0, BSD-3-Clause).
-  - `CHANGELOG.md`: Structured changelog (Keep-a-Changelog standard) documenting changes under the target version (e.g. `[0.0.1]` for first unreleased package; do NOT blindly inflate version to `2.0.0` or match external dependency versions).
-  - `CONTRIBUTING.md` / `SECURITY.md` (if applicable).
-- **Target Release Version Verification**:
-  - Verify that the target release version in `RELEASE-GATE.md`, `CHANGELOG.md`, and `audit-manifest.json` matches actual git tag history (or starts at `0.0.1` for brand new packages). Version numbers must never be copied from template defaults or upstream dependencies.
-  - Digital signature in `RELEASE-GATE.md` MUST contain exact commit SHA, package version, and framework version (`git describe --tags`).
+  - `CHANGELOG.md`: Structured changelog (Keep-a-Changelog standard) documenting changes under the target version.
+- **Packagist & GitHub Release Execution**:
+  - Pushing Git tags alone (`git push origin <tag>`) is NOT sufficient.
+  - The formal GitHub Release MUST be published via `gh release create <tag> --title "<tag>" --notes-file CHANGELOG.md` to ensure GitHub shows the version in the "Latest Release" badge and Packagist hooks trigger properly.
 - **Packagist & GitHub Repository Metadata Verification**:
   - Inspect GitHub repository metadata via `gh repo view <vendor>/<package> --json description,homepageUrl,repositoryTopics`:
     - **Description**: MUST match `composer.json` description verbatim.
     - **Homepage/Website**: MUST link to Packagist package page (`https://packagist.org/packages/<vendor>/<package>`).
-    - **Topics**: MUST be set to **STRICTLY EXACTLY 3** key domain tags (e.g. `laravel,diagnostics,ai-agent` or `laravel,scraping,multi-domain`). Never exceed or fall below 3 topics.
-    - If empty, outdated, or containing more/less than 3 topics, report findings and provide the exact remediation command (`gh repo edit <vendor>/<package> --description "..." --homepage "..." --remove-topic "..." --add-topic "tag1,tag2,tag3"`).
+    - **Topics**: MUST be set to **STRICTLY EXACTLY 3** key domain tags (e.g. `laravel,diagnostics,ai-agent` or `laravel,history,navigation`). Never exceed or fall below 3 topics.
 
 ### 3. Developer Experience (DX) & Ergonomics
 - Intuitive, idiomatic API design following Laravel conventions.
