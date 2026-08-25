@@ -32,10 +32,11 @@ Determine whether the package is correctly declared, installable, reproducible, 
 - Understand and enforce the distinction between libraries and applications: do NOT blindly require committing `composer.lock` for a reusable package library.
 
 ### 5. Release Artifact & Supply Chain Integrity (CRITICAL)
-- **`.gitattributes` Export Rules**: Ensure `.gitattributes` contains `export-ignore` for:
+- **`.gitattributes` Export Rules & Line Endings**: Ensure `.gitattributes` enforces standard line endings (`* text=auto eol=lf`) and contains `export-ignore` for:
   - `tests/`, `.github/`, `.phpunit.cache/`, `phpunit.xml`, `phpunit.xml.dist`
   - `.audit/`, `.agents/`, `.env*`, `.editorconfig`, `.git*`
   - `phpstan.neon*`, `pint.json`
+- **Platform & Extension Dependencies**: Verify that required PHP extensions (`ext-pdo`, `ext-mbstring`, `ext-zip`, etc.) are declared in `composer.json` rather than assumed to exist across all operating systems.
 - **Distribution Archive Verification**: Test building the release zip (`git archive`) and inspect its contents to prove dev files and test suites are not shipped to end users.
 - **Secret & Dirty File Check**: Ensure no API keys, credentials, temporary files, or local scratchpads are committed to git.
 

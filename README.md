@@ -65,11 +65,11 @@ The framework delegates audit tasks across 7 isolated specialist domains:
 | Agent | Focus Domain | Key Checks & Deterministic Tools |
 |---|---|---|
 | **01 Architecture & API** | Public contract stability & Laravel integration | ServiceProvider `register()` vs `boot()`, container bindings, facades, DTOs, `@internal` encapsulation, SemVer boundaries. |
-| **02 Code Quality** | Static analysis, strict typing & linting | `declare(strict_types=1);`, return/param types, Pint (`pint --test`), PHPStan (highest reasonable strictness), baseline audit. |
+| **02 Code Quality** | Static analysis, strict typing & cross-platform | `declare(strict_types=1);`, return/param types, Pint (`pint --test`), PHPStan (highest reasonable strictness), cross-platform path separators & PSR-4 case-sensitivity. |
 | **03 Database** | Migrations, DDL, queries & concurrency | `up()`/`down()` reversibility, table prefix collisions, index coverage, N+1 queries, transactions (`DB::transaction()`), multi-DB support. |
-| **04 Security & Isolation** | Vulnerabilities & host app containment | Container hijacking prevention, global config immutability, SQL/Command injection, unescaped Blade output, `composer audit`. |
-| **05 Composer & Supply Chain** | Manifest, dependencies & distribution zip | `composer validate --strict`, dependency segregation (`require` vs `require-dev`), `.gitattributes export-ignore`, `git archive` release check. |
-| **06 Testing & Matrix** | Test quality & boundary compatibility | PHPUnit/Pest with Testbench, dynamic `tests/bootstrap.php`, boundary matrix testing (`prefer-lowest` vs `prefer-stable`). |
+| **04 Security & Isolation** | Vulnerabilities & host app containment | Container hijacking prevention, global config immutability, SQL/Command injection, cross-platform process safety, `composer audit`. |
+| **05 Composer & Supply Chain** | Manifest, dependencies & distribution zip | `composer validate --strict`, dependency segregation (`require` vs `require-dev`), `.gitattributes export-ignore` & LF line endings, `git archive` release check. |
+| **06 Testing & Matrix** | Test quality & boundary compatibility | PHPUnit/Pest with Testbench, dynamic `tests/bootstrap.php`, boundary matrix testing (`prefer-lowest` vs `prefer-stable`), cross-platform path assertions. |
 | **07 Consumer Release** | First-party integration & documentation | Isolated fresh-install smoke test (no parent vendor leakage), auto-discovery, `vendor:publish`, README code accuracy, `CHANGELOG.md`, `LICENSE`. |
 
 ---

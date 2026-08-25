@@ -32,9 +32,10 @@ Find vulnerabilities and unsafe behavior, with special emphasis on preventing th
 - Hardcoded API tokens, private keys, passwords, or test credentials.
 - Accidental exposure of `.env` or sensitive configurations in exception stack traces or debug dumps (`dd()`, `dump()`).
 
-### 6. Filesystem Safety
+### 6. Filesystem & Process Safety
 - Path traversal vulnerabilities in file upload, download, or caching routines.
 - Unsafe file permissions or writing to arbitrary directories outside the intended `storage/` disk.
+- **Cross-Platform Process Safety**: Flag raw shell commands (`exec()`, `shell_exec()`, `passthru()`) that assume POSIX shell syntax or Linux-only binaries (`chmod`, `chown`, `which`, `curl`). Enforce `Symfony\Component\Process\Process` or native PHP functions.
 
 ### 7. Host Application Isolation (CRITICAL)
 - **Container Hijacking**: Overwriting existing host container bindings without conditional guards (`bindIf()`, `singletonIf()`).

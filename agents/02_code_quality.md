@@ -42,6 +42,11 @@ Determine whether the package implementation is robust, strongly typed, maintain
 - Discoverable APIs and autocompletion hints.
 - Template annotations (`@template T`) where justified for reusable containers/repositories.
 
+### 7. Cross-Platform Code Standards (CRITICAL)
+- **Path Separators**: Always use forward slashes (`/`) or `DIRECTORY_SEPARATOR` in PHP code. Flag any hardcoded backslashes (`\`) in file paths, generators, or migrations.
+- **Case-Sensitive PSR-4 Integrity**: Verify exact casing match between file paths, directories, and namespace/class declarations to prevent silent failures on case-sensitive Linux filesystems.
+- **Temporary Directories**: Use `sys_get_temp_dir()` or Laravel `storage_path()` rather than hardcoded `/tmp` or `C:\Temp`.
+
 ---
 
 ## 3. Tools & Execution

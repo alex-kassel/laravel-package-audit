@@ -29,6 +29,10 @@ Determine whether package behavior is sufficiently tested and whether declared P
 ### 4. CI Matrix & Automation
 - Audit GitHub Actions workflows (`.github/workflows/`) for matrix test definitions across PHP (8.2, 8.3, 8.4) and Laravel (10.x, 11.x, 12.x).
 
+### 5. Cross-Platform Test Reliability
+- **Path Assertions**: Verify tests do not make brittle string assertions assuming POSIX forward slashes or Windows backslashes (use normalized path comparisons).
+- **Temporary Files & Fixtures**: Ensure tests create temporary directories and files using `sys_get_temp_dir()` or Laravel virtual storage instead of hardcoded paths.
+
 ---
 
 ## 3. Tools & Execution
