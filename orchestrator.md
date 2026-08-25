@@ -165,4 +165,14 @@ Phase 2 MUST NOT begin without explicit user confirmation of choices in `.audit/
    - Verify `.gitattributes` `export-ignore` and clean `git archive` build.
    - Regenerate final `findings.json`, `FINAL-REPORT.md`, and `RELEASE-GATE.md` in the run directory and `latest/`.
    - Update [DASHBOARD.md](DASHBOARD.md).
+6. **Package Release Certification & Audit Badge**:
+   - Save a copy of the final `RELEASE-GATE.md` directly into the root of the audited package (`<package-path>/RELEASE-GATE.md`).
+   - Ensure `<package-path>/RELEASE-GATE.md` contains the framework link:
+     `> 🛡️ Audited with [Laravel Package Audit Framework](https://github.com/alex-kassel/laravel-package-audit).`
+   - In `<package-path>/README.md`, automatically insert the official verification badge directly under the main title:
+     ```markdown
+     [![Audited with Laravel Package Audit](https://img.shields.io/badge/Audited%20by-Laravel%20Package%20Audit-22c55e?style=flat-square&logo=shield)](RELEASE-GATE.md)
+     ```
+   - Commit the certification in the package repository:
+     `chore(release): certify package release readiness and add audit badge`
 

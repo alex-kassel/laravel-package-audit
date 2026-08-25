@@ -27,8 +27,10 @@ Determine whether the package can actually be installed, configured, understood,
   - Complete configuration reference explaining all environment variables and options.
   - Minimal quickstart copy-paste example.
   - Verifiable code samples (all snippets in README must be syntactically valid and match current API).
+  - Official Audit Verification Badge linked to `RELEASE-GATE.md`.
   - Troubleshooting and upgrade path guides.
 - **Standard Legal & Release Documents**:
+  - `RELEASE-GATE.md`: Certified audit pass summary referencing the framework.
   - `LICENSE`: Valid OSI-approved license (e.g. MIT, Apache-2.0, BSD-3-Clause).
   - `CHANGELOG.md`: Structured changelog (Keep-a-Changelog standard) documenting changes for `1.0.0`.
   - `CONTRIBUTING.md` / `SECURITY.md` (if applicable).

@@ -165,6 +165,22 @@ Every audit produces a clear, deterministic release verdict:
 
 ---
 
+## 🛡️ Package Audit Badge & Release Certification
+
+When a package passes all release gates and achieves the 🟢 **`READY`** verdict in Phase 2:
+1. The final `RELEASE-GATE.md` report is placed directly in the package's root repository.
+2. The official verification badge is placed in the package's `README.md`:
+
+```markdown
+[![Audited with Laravel Package Audit](https://img.shields.io/badge/Audited%20by-Laravel%20Package%20Audit-22c55e?style=flat-square&logo=shield)](RELEASE-GATE.md)
+```
+
+**Transparent Two-Step Verification Flow**:
+- **Step 1 (Package `README.md` ➔ `RELEASE-GATE.md`)**: A developer clicking the badge in your package repository immediately views the certified audit report with verified test results, static analysis coverage, and security checks.
+- **Step 2 (`RELEASE-GATE.md` ➔ Audit Framework)**: The report header links directly to [alex-kassel/laravel-package-audit](https://github.com/alex-kassel/laravel-package-audit), allowing developers to inspect the full audit framework and adopt it for their own packages.
+
+---
+
 ## 🧩 Execution Modes: Standalone vs Monorepo Workspace
 
 The framework is **universal and repository-agnostic**:
