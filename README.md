@@ -5,7 +5,7 @@
 [![PHP Platform](https://img.shields.io/badge/PHP-8.2%20%7C%208.3%20%7C%208.4-777bb4?style=for-the-badge&logo=php&logoColor=white)](https://php.net)
 [![License](https://img.shields.io/badge/License-MIT-0d9488?style=for-the-badge)](LICENSE)
 
-> **An industrial, 360-degree, evidence-based release gating and audit framework for packages in the Laravel / Composer ecosystem preparing for a public `1.0.0` or stable Packagist release.**
+> **A structured, evidence-driven multi-agent quality assurance and release gating framework for Laravel and PHP packages.**
 
 ---
 
