@@ -27,7 +27,7 @@ Determine whether the package can actually be installed, configured, understood,
   - Complete configuration reference explaining all environment variables and options.
   - Minimal quickstart copy-paste example.
   - Verifiable code samples (all snippets in README must be syntactically valid and match current API).
-  - Official Audit Verification Badge linked to `RELEASE-GATE.md`.
+  - Official Audit Verification Badge linked to `RELEASE-GATE.md` (**MUST be the VERY FIRST badge** at the top of the README, using exact template `[![Audited by Laravel Package Audit](https://img.shields.io/badge/Audited%20by-Laravel%20Package%20Audit-10b981?style=for-the-badge&logo=shield)](RELEASE-GATE.md)`).
   - Troubleshooting and upgrade path guides.
 - **Standard Legal & Release Documents**:
   - `RELEASE-GATE.md`: Certified audit pass summary referencing the framework and stating the exact realistic target release version.
