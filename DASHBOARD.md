@@ -7,9 +7,9 @@ Automated by the [Lead Audit Orchestrator](orchestrator.md) following the [Larav
 
 ## 📊 Package Audit Status
 
-| Package | Last Audited | Target Version | Verdict | Blockers | Critical | Major | Pending Decisions | Latest Report |
-|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|---|
-| *`<vendor>/<package-name>`* | *Not yet audited* | `1.0.0` | ⚪ PENDING | - | - | - | - | - |
+| Package | Last Audited | Duration | Target Version | Verdict | Blockers | Critical | Major | Pending Decisions | Latest Report |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|---|
+| *`<vendor>/<package-name>`* | *Not yet audited* | - | `1.0.0` | ⚪ PENDING | - | - | - | - | - |
 
 ---
 

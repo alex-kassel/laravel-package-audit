@@ -28,6 +28,19 @@
         "consumer_release"
       ]
     },
+    "started_at": {
+      "type": "string",
+      "description": "ISO 8601 timestamp when the agent started execution."
+    },
+    "completed_at": {
+      "type": "string",
+      "description": "ISO 8601 timestamp when the agent finished execution."
+    },
+    "duration_seconds": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Total execution time in seconds spent by this agent."
+    },
     "audit_status": {
       "type": "string",
       "enum": ["PASS", "FAIL", "PARTIAL", "BLOCKED", "NOT_APPLICABLE"],

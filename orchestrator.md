@@ -95,11 +95,15 @@ If any essential audit tool is absent from the workspace (for example, `vendor/b
    - Save to `.audit/runs/<vendor>/<package-name>/<timestamp>/decisions.md`.
    - Provide concrete context, tradeoffs, and selectable options (`ACCEPT`, `FIX`, `IGNORE`, `DEFER`).
    - Do NOT ask the human to decide obvious bugs (syntax errors, failing tests, missing dependencies); only genuine architectural/tradeoff questions belong here.
-5. **Generate Reports & Sync Dashboard**:
+5. **Execution Timing & Metrics Tracking (CRITICAL)**:
+   - Track `started_at`, `completed_at`, and compute `duration_seconds` for each individual agent execution.
+   - Record total elapsed time (`total_duration_seconds`) and completion timestamp in `audit-manifest.json`.
+   - Embed an **Execution Time & Performance Scorecard** table in `FINAL-REPORT.md` and `RELEASE-GATE.md` (displaying duration in seconds for each agent and total audit run time).
+6. **Generate Reports & Sync Dashboard**:
    - Comprehensive report: `.audit/runs/<vendor>/<package-name>/<timestamp>/FINAL-REPORT.md`.
    - High-level Release Gate: `.audit/runs/<vendor>/<package-name>/<timestamp>/RELEASE-GATE.md` (`READY` | `CONDITIONAL` | `BLOCKED`).
    - Sync all files to `.audit/runs/<vendor>/<package-name>/latest/`.
-   - Update the package's row in [DASHBOARD.md](DASHBOARD.md).
+   - Update the package's row in [DASHBOARD.md](DASHBOARD.md) (recording verdict, blockers, and total duration).
 
 ---
 
