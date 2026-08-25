@@ -67,8 +67,10 @@ Configuration: phpunit.xml
 {
   "audit_run": "{{AUDIT_RUN_PATH}}",
   "package": "{{PACKAGE_NAME}}",
+  "commit": "{{COMMIT}}",
   "version": "{{TARGET_VERSION}}",
   "framework": "https://github.com/alex-kassel/laravel-package-audit",
+  "framework_version": "{{FRAMEWORK_VERSION}}",
   "environment": {
     "php": "{{PHP_VERSION}}",
     "composer": "{{COMPOSER_VERSION}}",

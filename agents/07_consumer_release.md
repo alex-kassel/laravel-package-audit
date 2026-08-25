@@ -36,6 +36,13 @@ Determine whether the package can actually be installed, configured, understood,
   - `CONTRIBUTING.md` / `SECURITY.md` (if applicable).
 - **Target Release Version Verification**:
   - Verify that the target release version in `RELEASE-GATE.md`, `CHANGELOG.md`, and `audit-manifest.json` matches actual git tag history (or starts at `0.0.1` for brand new packages). Version numbers must never be copied from template defaults or upstream dependencies.
+  - Digital signature in `RELEASE-GATE.md` MUST contain exact commit SHA, package version, and framework version (`git describe --tags`).
+- **Packagist & GitHub Repository Metadata Verification**:
+  - Inspect GitHub repository metadata via `gh repo view <vendor>/<package> --json description,homepageUrl,repositoryTopics`:
+    - **Description**: MUST match `composer.json` description verbatim.
+    - **Homepage/Website**: MUST link to Packagist package page (`https://packagist.org/packages/<vendor>/<package>`).
+    - **Topics**: MUST be set to 3 key domain tags (e.g. `laravel`, `scraping`, `multi-domain`).
+    - If empty or outdated, report findings and provide the exact remediation command (`gh repo edit <vendor>/<package> --description "..." --homepage "..." --add-topic "..."`).
 
 ### 3. Developer Experience (DX) & Ergonomics
 - Intuitive, idiomatic API design following Laravel conventions.

@@ -107,6 +107,8 @@ If any essential audit tool is absent from the workspace (for example, `vendor/b
 6. **Generate Reports & Sync Dashboard**:
    - Comprehensive report: `.audit/runs/<vendor>/<package-name>/<timestamp>/FINAL-REPORT.md`.
    - High-level Release Gate: `.audit/runs/<vendor>/<package-name>/<timestamp>/RELEASE-GATE.md` (`READY` | `CONDITIONAL` | `BLOCKED`).
+     - **Digital Signature Requirement**: MUST include exact `commit` SHA, `version` (e.g. `0.0.1`), and `framework_version` (dynamically from `git describe --tags`).
+     - **Packagist & GitHub Metadata**: Validate GitHub description, homepage, and topics matching `composer.json`.
    - Sync all files to `.audit/runs/<vendor>/<package-name>/latest/`.
    - Update the package's row in [DASHBOARD.md](DASHBOARD.md) (recording verdict, blockers, and total duration).
 

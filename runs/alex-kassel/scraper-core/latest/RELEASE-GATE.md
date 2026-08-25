@@ -9,9 +9,9 @@
 
 - **Package Name:** `alex-kassel/scraper-core`
 - **Target Release Version:** `v0.0.1`
-- **Target Branch / Commit:** `main` (`26050d5`)
+- **Target Branch / Commit:** `main` (`5f808ab`)
 - **Release Verdict:** 🟢 **READY FOR RELEASE**
-- **Audit Framework Version:** `2.0.0`
+- **Audit Framework Version:** `1.0.13`
 - **Certification Date:** 2026-08-25
 - **Known Release Blockers:** `0`
 - **Critical Defects:** `0`
@@ -67,8 +67,10 @@ OK (10 tests, 39 assertions)
 {
   "audit_run": ".audit/runs/alex-kassel/scraper-core/latest/",
   "package": "alex-kassel/scraper-core",
+  "commit": "5f808ab",
   "version": "0.0.1",
   "framework": "https://github.com/alex-kassel/laravel-package-audit",
+  "framework_version": "1.0.13",
   "environment": {
     "php": "8.4.24",
     "composer": "2.10.2",
