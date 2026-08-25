@@ -80,8 +80,9 @@ The audit framework operates in two distinct phases preceded by a bootstrap self
 
 ```mermaid
 flowchart TD
-    subgraph Phase 0 [Phase 0: Bootstrap & Framework Self-Check]
-        S0[Verify Framework Integrity: schemas, contracts, templates] --> A[Environment Snapshot & Manifest]
+    subgraph Phase 0 [Phase 0: Bootstrap, Self-Check & Tooling Gate]
+        S0[1. Verify Framework Integrity: schemas, contracts, templates] --> T0[2. Pre-flight Tooling Gate: phpunit, pint, phpstan]
+        T0 --> A[3. Environment Snapshot & Manifest Initialization]
     end
 
     subgraph Phase 1 [Phase 1: Audit-Only & Read-Only]
@@ -112,13 +113,14 @@ flowchart TD
 
 Give a simple prompt to your AI coding assistant (Antigravity, Cursor, Claude Code, Copilot):
 
-> *"Run a full package audit for `packages/<vendor>/<package-name>` strictly according to `.audit/orchestrator.md`. Execute Phase 1 (Audit-Only)."*
+> *"Run a full package audit for `<package-path>` strictly according to `.audit/orchestrator.md`. Execute Phase 1 (Audit-Only)."*
 
 The agent will automatically:
-1. Conduct Phase 0 Framework Self-Check and initialize `.audit/runs/<vendor>/<package-name>/<timestamp>/`.
-2. Execute all 7 specialist contracts in read-only mode.
-3. Validate and deduplicate findings into `findings.json`.
-4. Generate `FINAL-REPORT.md`, `RELEASE-GATE.md`, `decisions.md`, and update `.audit/DASHBOARD.md`.
+1. Conduct **Phase 0 Framework Self-Check & Tooling Readiness Gate** (if essential tools like `phpstan` or `pint` are missing, it prompts you immediately with exact installation commands).
+2. Initialize run directory at `.audit/runs/<vendor>/<package-name>/<timestamp>/`.
+3. Execute all 7 specialist contracts in read-only mode.
+4. Validate and deduplicate findings into `findings.json`.
+5. Generate `FINAL-REPORT.md`, `RELEASE-GATE.md`, `decisions.md`, and update `DASHBOARD.md`.
 
 ---
 

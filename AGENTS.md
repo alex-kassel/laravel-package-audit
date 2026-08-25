@@ -35,5 +35,7 @@ Welcome to the **Laravel Package Audit Framework** repository. This repository d
    - Enforce that packages share the host `vendor/` autoloader via `tests/bootstrap.php` and never create nested `vendor/` folders.
 4. **Honest Reporting**:
    - Record missing or failed tools under `tools_missing` / `tools_failed` with status `BLOCKED` or `PARTIAL`.
-5. **Zero Stubs Policy**:
+5. **Pre-flight Tooling Readiness Gate**:
+   - Verify required CLI binaries (`phpstan`, `pint`, `phpunit`) in Phase 0. If any essential tool is missing, halt/prompt the user immediately on turn 1 with the exact install command before proceeding.
+6. **Zero Stubs Policy**:
    - Maintain production-grade completeness across all contracts, schemas, and reports.

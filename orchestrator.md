@@ -38,7 +38,22 @@ The orchestrator performs a self-check of the audit framework itself:
 - Ensure no contradictory instructions exist between orchestrator and agent contracts.
 *(If the framework itself is corrupt, halt immediately with status `FRAMEWORK_INTEGRITY_FAIL`)*.
 
-### 2. Workspace & Manifest Initialization
+### 2. Pre-flight Tooling & Environment Readiness Gate (CRITICAL)
+Before launching Phase 1, the orchestrator immediately checks binary availability in the active workspace environment:
+- **Test Runner**: `vendor/bin/phpunit` or `vendor/bin/pest`
+- **Code Style Linter**: `vendor/bin/pint` or `vendor/bin/php-cs-fixer`
+- **Static Analysis**: `vendor/bin/phpstan` (or `vendor/bin/psalm`)
+- **Package Manager & VCS**: `composer`, `git`
+
+**Missing Tooling Action Rule**:
+If any essential audit tool is absent from the workspace (for example, `vendor/bin/phpstan` is missing):
+1. The orchestrator **MUST NOT** proceed silently with degraded or blind coverage.
+2. The orchestrator **MUST IMMEDIATELY notify the user** before starting Phase 1:
+   - List the missing tooling and the audit domains affected (e.g., Agent 02 static analysis).
+   - Provide the exact installation command (e.g., `composer require --dev larastan/larastan` or `composer require --dev phpstan/phpstan`).
+   - Request user confirmation to install the missing tooling or explicitly confirm running in partial mode.
+
+### 3. Workspace & Manifest Initialization
 1. Verify package repository clean state (`git status`).
 2. Establish target run directory:
    - Run timestamp directory: `.audit/runs/<vendor>/<package-name>/<YYYY-MM-DD_HH-mm-ss>/`
