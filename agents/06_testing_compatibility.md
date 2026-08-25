@@ -27,7 +27,8 @@ Determine whether package behavior is sufficiently tested and whether declared P
 - Multi-database engine test runs (SQLite in-memory, MySQL, PostgreSQL where configured).
 
 ### 4. CI Matrix & Automation
-- Audit GitHub Actions workflows (`.github/workflows/`) for matrix test definitions across PHP (8.2, 8.3, 8.4) and Laravel (10.x, 11.x, 12.x).
+- Audit GitHub Actions workflows (`.github/workflows/`) for matrix test definitions across declared PHP versions (e.g. 8.2, 8.3, 8.4) and Laravel matrix.
+- Verify that matrix workflows execute `composer update --prefer-dist --no-interaction --no-progress` (never `composer install`) to ensure dynamic dependency resolution for each PHP runner version.
 
 ### 5. Cross-Platform Test Reliability
 - **Path Assertions**: Verify tests do not make brittle string assertions assuming POSIX forward slashes or Windows backslashes (use normalized path comparisons).

@@ -164,12 +164,17 @@ Phase 2 MUST NOT begin without explicit user confirmation of choices in `.audit/
    - Verify that no regressions were introduced.
 5. **Release Artifact Verification**:
    - Verify `.gitattributes` `export-ignore` and clean `git archive` build.
-   - Regenerate final `findings.json`, `FINAL-REPORT.md`, and `RELEASE-GATE.md` in the run directory and `latest/`.
+   - Regenerate final `findings.json`, `FINAL-REPORT.md`, and `RELEASE-GATE.md` using the canonical template `.audit/release-gate.template.md`.
    - Update [DASHBOARD.md](DASHBOARD.md).
 6. **Package Release Certification & Audit Badge**:
-   - Save a copy of the final `RELEASE-GATE.md` directly into the root of the audited package (`<package-path>/RELEASE-GATE.md`).
+   - Save a copy of the final `RELEASE-GATE.md` (strictly formatted according to `.audit/release-gate.template.md`) directly into the root of the audited package (`<package-path>/RELEASE-GATE.md`).
+   - Ensure `<package-path>/RELEASE-GATE.md` follows the 4 canonical sections:
+     1. Executive Release Summary
+     2. 360-Degree Domain Assessment Grid
+     3. Quality & Verification Scorecard
+     4. Audit Trail & Digital Signature
    - Ensure `<package-path>/RELEASE-GATE.md` contains the framework link:
-     `> 🛡️ Audited with [Laravel Package Audit Framework](https://github.com/alex-kassel/laravel-package-audit).`
+     `> 🛡️ **Audited with [Laravel Package Audit Framework](https://github.com/alex-kassel/laravel-package-audit)**`
    - *(Note: Badges belong exclusively in root `README.md`; never put badges inside `RELEASE-GATE.md`)*.
    - In `<package-path>/README.md`, automatically insert the official verification badge directly under the main title:
      ```markdown

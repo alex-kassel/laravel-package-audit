@@ -28,8 +28,9 @@ Determine whether the package is correctly declared, installable, reproducible, 
 - `autoload-dev` mapping for tests (`tests/` -> `Vendor\\PackageName\\Tests\\`).
 - Correct namespace case matching directory structure.
 
-### 4. Lockfile Strategy (Library vs Application)
-- Understand and enforce the distinction between libraries and applications: do NOT blindly require committing `composer.lock` for a reusable package library.
+### 4. Lockfile & CI Dependency Resolution Strategy (CRITICAL)
+- **Library vs Application Rule**: Reusable package libraries (`"type": "library"`) MUST NOT track `composer.lock` in git. `composer.lock` MUST be listed in `.gitignore` and `.gitattributes` (`export-ignore`). Committing a lockfile to a library locks transitive dependencies to the author's local PHP version and breaks cross-version CI matrix tests.
+- **CI Dependency Resolution**: CI workflows (`.github/workflows/*.yml`) MUST execute `composer update --prefer-dist --no-interaction --no-progress` instead of `composer install` to dynamically resolve compatible dependencies for each matrix PHP version.
 
 ### 5. Release Artifact & Supply Chain Integrity (CRITICAL)
 - **`.gitattributes` Export Rules & Line Endings**: Ensure `.gitattributes` enforces standard line endings (`* text=auto eol=lf`) and contains `export-ignore` for:
