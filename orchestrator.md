@@ -65,7 +65,8 @@ If any essential audit tool is absent from the workspace (for example, `vendor/b
    - `findings/` (raw JSON from agents)
    - `reports/` (human-readable Markdown from agents)
 4. Record metadata in `.audit/runs/<vendor>/<package-name>/<YYYY-MM-DD_HH-mm-ss>/audit-manifest.json`:
-   - Package name, vendor, commit SHA, branch, tags.
+   - Package name, vendor, commit SHA, branch.
+   - Latest release tag / version resolved dynamically via `git tag -l` or `git describe --tags` (never hardcode `1.0.0`).
    - PHP version, Composer version, Laravel/Testbench version, OS.
    - Declared support matrix from `composer.json` (PHP, Laravel, supported DB engines).
    - Audit start timestamp.
