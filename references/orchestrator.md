@@ -98,7 +98,7 @@ If any essential audit tool is absent from the workspace (for example, `vendor/b
 4. **Compile Human Decision Sheet (`decisions.md`)**:
    - Extract items where `requires_human_decision == true`.
    - Save to `.audit/runs/<vendor>/<package-name>/<timestamp>/decisions.md`.
-   - Provide concrete context, tradeoffs, and selectable options (`ACCEPT`, `FIX`, `IGNORE`, `DEFER`).
+   - Provide concrete context, tradeoffs, selectable options (`ACCEPT`, `FIX`, `IGNORE`, `DEFER`), and the **agent's explicit recommendation with technical rationale** for each non-obvious question.
    - Do NOT ask the human to decide obvious bugs (syntax errors, failing tests, missing dependencies); only genuine architectural/tradeoff questions belong here.
 5. **Execution Timing & Metrics Tracking (CRITICAL)**:
    - Track `started_at`, `completed_at`, and compute `duration_seconds` for each individual agent execution.
@@ -111,6 +111,13 @@ If any essential audit tool is absent from the workspace (for example, `vendor/b
      - **Packagist & GitHub Metadata**: Validate GitHub description, homepage, and topics matching `composer.json`.
    - Sync all files to `.audit/runs/<vendor>/<package-name>/latest/`.
    - Update the package's row in [DASHBOARD.md](DASHBOARD.md) (recording verdict, blockers, and total duration).
+7. **Mandatory Phase 1 Chat Output & Human Gate (🛑 HARD STOP)**:
+   The orchestrator MUST present the Phase 1 audit results to the user in 3 distinct sections:
+   - **Section 1: Test & Tooling Baseline**: Exact command execution results (`composer pkg:check <vendor/package>` — tests, Pint, PHPStan, Composer validate).
+   - **Section 2: Mechanical & Routine Fixes**: Non-invasive automatic fixes planned for Phase 2 (Pint formatting, PHPStan types, missing docblocks, syntax cleanups).
+   - **Section 3: Human Decisions & Logic Interventions**: High-impact items requiring confirmation (API modifications, adding/removing/invoking methods, service logic, schema/migration alterations).
+     - **Mandatory Agent Recommendation & Rationale**: For every non-obvious issue or decision point, the agent MUST state its clear recommendation (`(Recommended)`) backed by architectural rationale and community best practices.
+   - **🛑 HARD STOP**: The orchestrator and specialist agents **MUST STOP all tool calls and end turn**. Zero modifications to package source code or git commits are permitted until the user explicitly responds with their decisions.
 
 ---
 

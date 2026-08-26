@@ -30,23 +30,34 @@ This skill provides the self-contained industrial audit framework for packages i
 
 ## Operational Workflow
 
-### Phase 1: Audit-Only (Read-Only)
+### Phase 1: Audit-Only & Human Decision Gate (Read-Only)
 1. **Pre-Audit Discovery**:
    - Inspect package archetype (Library, Engine, Domain) and identify consumers in `packages/`.
    - Determine target version (default `0.1.0` or latest git tag).
 2. **Execute 7 Specialized Audit Contracts**:
    - Run each contract defined in [`references/agents/`](./references/agents/).
    - Populate audit manifest using [`resources/templates/audit-manifest.template.json`](./resources/templates/audit-manifest.template.json).
-3. **Compile Findings & Human Decision Gate**:
+3. **Compile Run Artifacts**:
    - Save findings and reports into `packages/<vendor>/<package>/.audit/<timestamp>/findings.json`.
-   - Compile actionable choices into `.audit/<timestamp>/decisions.md`.
-   - Present preliminary `RELEASE-GATE.md` and wait for human feedback.
+   - Compile actionable choices into `packages/<vendor>/<package>/.audit/<timestamp>/decisions.md`.
+   - Generate preliminary `RELEASE-GATE.md`.
+4. **Mandatory Phase 1 Chat Output Protocol**:
+   In the user response, the agent MUST format findings into 3 structured sections:
+   - **Section 1: Test & Tooling Baseline**: Exact results of CLI verification (`composer pkg:check <vendor/package>` — Composer validate, Pint, PHPStan, PHPUnit/Pest).
+   - **Section 2: Mechanical & Routine Fixes**: List of non-invasive fixes planned for Phase 2 (Pint formatting, PHPStan type annotations, missing docblocks, syntax cleanups).
+   - **Section 3: Human Decisions & Logic Interventions**: Items requiring explicit human approval (public API changes, adding/removing/calling methods, service logic changes, schema/migration alterations).
+     - **Mandatory Agent Recommendation & Rationale**: For every non-obvious issue or dilemma, the agent MUST provide its explicit technical recommendation (`(Recommended)`) accompanied by concrete architectural rationale and trade-off analysis.
+5. **🛑 MANDATORY HUMAN GATE (HARD STOP)**:
+   - **Zero Code Modification**: The agent is **strictly prohibited** from editing any source files, running mutating commands, creating git commits, or proceeding to Phase 2 in the same turn.
+   - The agent **MUST stop calling tools and end the turn** immediately after outputting the Phase 1 report, awaiting the user's explicit confirmation or feedback on Section 3 items.
 
-### Phase 2: Remediation & Certification
+### Phase 2: Remediation & Certification (After User Confirmation)
 1. **Remediation Graph**:
-   Execute fixes sequentially: Root Architectural/Schema → API/DB refactor → Code quality & types → Tests.
-2. **Delta Verification**:
-   Verify with `composer pkg:check <vendor>/<package> --json` and `composer pkg:readme <vendor>/<package> --json`.
-3. **Freeze `RELEASE-GATE.md`**:
-   Copy final certified `RELEASE-GATE.md` into target package root with exact commit SHA and framework version.
+   Execute fixes sequentially based on user decisions: Root Architectural/Schema → API/DB refactor → Code quality & types → Tests.
+2. **Atomic Commits & Delta Verification**:
+   - Create atomic semantic commits for discrete defect groups.
+   - Verify with `composer pkg:check <vendor>/<package> --json` and `composer pkg:readme <vendor>/<package> --json`.
+3. **Freeze `RELEASE-GATE.md` & Badge**:
+   - Copy final certified `RELEASE-GATE.md` into target package root with exact commit SHA and framework version.
+   - Update README audit badge and monorepo DASHBOARD.md.
    *Rule: `RELEASE-GATE.md` is an immutable certified snapshot and must never be edited in-place.*
