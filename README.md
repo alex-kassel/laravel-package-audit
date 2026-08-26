@@ -178,7 +178,7 @@ When a package passes all release gates and achieves the 🟢 **`READY`** verdic
 2. The official verification badge is placed in the package's `README.md`:
 
 ```markdown
-[![Audited by Laravel Package Audit](https://img.shields.io/badge/Audited%20by-Laravel%20Package%20Audit-10b981?style=for-the-badge&logo=shield)](RELEASE-GATE.md)
+<a href="RELEASE-GATE.md"><img src="https://img.shields.io/badge/Audit-Verified-10b981?logo=shield" alt="Audit Verified"></a>
 ```
 
 **Transparent Two-Step Verification Flow**:
