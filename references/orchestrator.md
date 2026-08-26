@@ -35,9 +35,9 @@ Before launching specialist agents:
 
 ### 1. Framework Self-Check (Integrity Verification)
 The orchestrator performs a self-check of the audit framework itself:
-- Verify that all 7 agent contracts exist in `agents/` (`01_` through `07_`).
-- Verify that JSON schemas (`schema/finding.schema.json` and `schema/agent-report.schema.json`) are valid Draft-07 JSON.
-- Verify `audit-manifest.template.json` and `DASHBOARD.md` exist.
+- Verify that all 7 agent contracts exist in `references/agents/` (`01_` through `07_`).
+- Verify that JSON schemas (`resources/schema/finding.schema.json` and `resources/schema/agent-report.schema.json`) are valid Draft-07 JSON.
+- Verify `resources/templates/audit-manifest.template.json` and `resources/templates/release-gate.template.md` exist.
 - Ensure no contradictory instructions exist between orchestrator and agent contracts.
 *(If the framework itself is corrupt, halt immediately with status `FRAMEWORK_INTEGRITY_FAIL`)*.
 
@@ -59,18 +59,18 @@ If any essential audit tool is absent from the workspace (for example, `vendor/b
 ### 3. Workspace & Manifest Initialization
 1. Verify package repository clean state (`git status`).
 2. Establish target run directory:
-   - Run timestamp directory: `.audit/runs/<vendor>/<package-name>/<YYYY-MM-DD_HH-mm-ss>/`
-   - Active mirror directory: `.audit/runs/<vendor>/<package-name>/latest/` (updated via direct directory copy/mirroring to guarantee cross-platform compatibility across Windows, Linux, and macOS without symlink permission failures).
+   - Run timestamp directory: `packages/<vendor>/<package-name>/.audit/<YYYY-MM-DD_HH-mm-ss>/`
+   - Active mirror directory: `packages/<vendor>/<package-name>/.audit/latest/` (updated via direct directory copy/mirroring to guarantee cross-platform compatibility across Windows, Linux, and macOS without symlink permission failures).
 3. Initialize subdirectories inside the run directory:
    - `findings/` (raw JSON from agents)
    - `reports/` (human-readable Markdown from agents)
-4. Record metadata in `.audit/runs/<vendor>/<package-name>/<YYYY-MM-DD_HH-mm-ss>/audit-manifest.json`:
+4. Record metadata in `packages/<vendor>/<package-name>/.audit/<YYYY-MM-DD_HH-mm-ss>/audit-manifest.json`:
    - Package name, vendor, commit SHA, branch.
    - **Target Release Version Determination (STRICT SEMVER RESOLUTION)**:
      - Check repository git tags: `git tag -l --sort=-v:refname`.
      - If previous tags exist: calculate the next target release version according to change scope (patch/minor/major) or user instruction.
      - **If NO tags exist (new / unreleased package)**: The default target release version MUST be initialized at `0.0.1` (or `0.1.0` if specified).
-     - **STRICT PROHIBITION**: NEVER blindly copy version numbers from dependency packages (e.g. requiring `laravel-domain-core: ^2.0` does NOT make the target package `v2.0.0`) and NEVER keep template placeholder versions like `2.0.0` or `1.0.0`.
+     - **STRICT PROHIBITION**: NEVER blindly copy version numbers from dependency packages (e.g. requiring a dependency at `^2.0` does NOT make the target package `v2.0.0`) and NEVER keep template placeholder versions like `2.0.0` or `1.0.0`.
    - PHP version, Composer version, Laravel/Testbench version, OS.
    - Declared support matrix from `composer.json` (PHP, Laravel, supported DB engines).
    - Audit start timestamp.
@@ -79,25 +79,25 @@ If any essential audit tool is absent from the workspace (for example, `vendor/b
 
 ## 4. Phase 1: Audit-Only Execution Flow (Zero Code Modification)
 1. **Launch 7 Specialized Audit Agents** (in read-only mode):
-   - **Agent 01 (Architecture & API)**: `.audit/agents/01_architecture_api.md`
-   - **Agent 02 (Code Quality & Types)**: `.audit/agents/02_code_quality.md`
-   - **Agent 03 (Database & Migrations)**: `.audit/agents/03_database.md`
-   - **Agent 04 (Security & Host Isolation)**: `.audit/agents/04_security_isolation.md`
-   - **Agent 05 (Composer & Supply Chain)**: `.audit/agents/05_composer_supply_chain.md`
-   - **Agent 06 (Testing & Compatibility)**: `.audit/agents/06_testing_compatibility.md`
-   - **Agent 07 (Consumer Experience & Release)**: `.audit/agents/07_consumer_release.md`
+   - **Agent 01 (Architecture & API)**: `references/agents/01_architecture_api.md`
+   - **Agent 02 (Code Quality & Types)**: `references/agents/02_code_quality.md`
+   - **Agent 03 (Database & Migrations)**: `references/agents/03_database.md`
+   - **Agent 04 (Security & Host Isolation)**: `references/agents/04_security_isolation.md`
+   - **Agent 05 (Composer & Supply Chain)**: `references/agents/05_composer_supply_chain.md`
+   - **Agent 06 (Testing & Compatibility)**: `references/agents/06_testing_compatibility.md`
+   - **Agent 07 (Consumer Experience & Release)**: `references/agents/07_consumer_release.md`
      *(Note: Consumer test MUST NOT accidentally resolve undeclared package runtime dependencies from parent project `vendor/`)*.
 2. **Validate Agent Outputs**:
-   - Validate each finding JSON in `runs/<vendor>/<package-name>/<timestamp>/findings/` against `.audit/schema/agent-report.schema.json`.
-   - Ensure all finding objects conform to `.audit/schema/finding.schema.json`.
+   - Validate each finding JSON in `packages/<vendor>/<package-name>/.audit/<timestamp>/findings/` against `resources/schema/agent-report.schema.json`.
+   - Ensure all finding objects conform to `resources/schema/finding.schema.json`.
    - Reject malformed findings or ungrounded claims.
 3. **Deduplicate & Aggregate Findings**:
    - Group findings sharing the same `root_cause_id` into unified issue cards.
    - Link cross-domain manifestations (e.g. Architecture + Database + Security).
-   - Save consolidated output to `.audit/runs/<vendor>/<package-name>/<timestamp>/findings.json`.
+   - Save consolidated output to `packages/<vendor>/<package-name>/.audit/<timestamp>/findings.json`.
 4. **Compile Human Decision Sheet (`decisions.md`)**:
    - Extract items where `requires_human_decision == true`.
-   - Save to `.audit/runs/<vendor>/<package-name>/<timestamp>/decisions.md`.
+   - Save to `packages/<vendor>/<package-name>/.audit/<timestamp>/decisions.md`.
    - Provide concrete context, tradeoffs, selectable options (`ACCEPT`, `FIX`, `IGNORE`, `DEFER`), and the **agent's explicit recommendation with technical rationale** for each non-obvious question.
    - Do NOT ask the human to decide obvious bugs (syntax errors, failing tests, missing dependencies); only genuine architectural/tradeoff questions belong here.
 5. **Execution Timing & Metrics Tracking (CRITICAL)**:
@@ -105,12 +105,12 @@ If any essential audit tool is absent from the workspace (for example, `vendor/b
    - Record total elapsed time (`total_duration_seconds`) and completion timestamp in `audit-manifest.json`.
    - Embed an **Execution Time & Performance Scorecard** table in `FINAL-REPORT.md` and `RELEASE-GATE.md` (displaying duration in seconds for each agent and total audit run time).
 6. **Generate Reports & Sync Dashboard**:
-   - Comprehensive report: `.audit/runs/<vendor>/<package-name>/<timestamp>/FINAL-REPORT.md`.
-   - High-level Release Gate: `.audit/runs/<vendor>/<package-name>/<timestamp>/RELEASE-GATE.md` (`READY` | `CONDITIONAL` | `BLOCKED`).
-     - **Digital Signature Requirement**: MUST include exact `commit` SHA, `version` (e.g. `0.0.1`), and `framework_version` (dynamically from `git describe --tags`).
+   - Comprehensive report: `packages/<vendor>/<package-name>/.audit/<timestamp>/FINAL-REPORT.md`.
+   - High-level Release Gate: `packages/<vendor>/<package-name>/.audit/<timestamp>/RELEASE-GATE.md` (`READY` | `CONDITIONAL` | `BLOCKED`).
+     - **Verification Snapshot Metadata**: MUST include exact `commit` SHA, `version` (e.g. `0.0.1`), and `framework_version` (dynamically from `git describe --tags`).
      - **Packagist & GitHub Metadata**: Validate GitHub description, homepage, and topics matching `composer.json`.
-   - Sync all files to `.audit/runs/<vendor>/<package-name>/latest/`.
-   - Update the package's row in [DASHBOARD.md](DASHBOARD.md) (recording verdict, blockers, and total duration).
+   - Sync all files to `packages/<vendor>/<package-name>/.audit/latest/`.
+   - Update the package's row in monorepo [DASHBOARD.md](DASHBOARD.md) if present (recording verdict, blockers, and total duration).
 7. **Mandatory Phase 1 Chat Output & Human Gate (🛑 HARD STOP)**:
    The orchestrator MUST present the Phase 1 audit results to the user in 3 distinct sections:
    - **Section 1: Test & Tooling Baseline**: Exact command execution results (`composer pkg:check <vendor/package>` — tests, Pint, PHPStan, Composer validate).
@@ -148,7 +148,7 @@ If any essential audit tool is absent from the workspace (for example, `vendor/b
 ---
 
 ## 6. Phase 2: Remediation & Delta-Audit
-Phase 2 MUST NOT begin without explicit user confirmation of choices in `.audit/runs/<vendor>/<package-name>/latest/decisions.md`.
+Phase 2 MUST NOT begin without explicit user confirmation of choices in `packages/<vendor>/<package-name>/.audit/latest/decisions.md` (or the chat response).
 
 1. **Build Dynamic Remediation Dependency Graph**:
    ```text
@@ -177,15 +177,14 @@ Phase 2 MUST NOT begin without explicit user confirmation of choices in `.audit/
    - Verify that no regressions were introduced.
 5. **Release Artifact Verification**:
    - Verify `.gitattributes` `export-ignore` and clean `git archive` build.
-   - Regenerate final `findings.json`, `FINAL-REPORT.md`, and `RELEASE-GATE.md` using the canonical template `.audit/release-gate.template.md`.
-   - Update [DASHBOARD.md](DASHBOARD.md).
-6. **Package Release Certification & Audit Badge**:
-   - Save a copy of the final `RELEASE-GATE.md` (strictly formatted according to `.audit/release-gate.template.md`) directly into the root of the audited package (`<package-path>/RELEASE-GATE.md`).
+   - Regenerate final `findings.json`, `FINAL-REPORT.md`, and `RELEASE-GATE.md` using the canonical template `resources/templates/release-gate.template.md`.
+6. **Package Release Verification Snapshot & Audit Badge**:
+   - Save a copy of the final `RELEASE-GATE.md` (strictly formatted according to `resources/templates/release-gate.template.md`) directly into the root of the audited package (`<package-path>/RELEASE-GATE.md`).
    - Ensure `<package-path>/RELEASE-GATE.md` follows the 4 canonical sections:
      1. Executive Release Summary
      2. 360-Degree Domain Assessment Grid
      3. Quality & Verification Scorecard
-     4. Audit Trail & Digital Signature
+     4. Audit Trail & Verification Snapshot
    - Ensure `<package-path>/RELEASE-GATE.md` contains the framework link:
      `> 🛡️ **Audited with [Laravel Package Audit Framework](https://github.com/alex-kassel/laravel-package-audit)**`
    - *(Note: Badges belong exclusively in root `README.md`; never put badges inside `RELEASE-GATE.md`)*.
@@ -193,5 +192,5 @@ Phase 2 MUST NOT begin without explicit user confirmation of choices in `.audit/
      ```markdown
      <a href="RELEASE-GATE.md"><img src="https://img.shields.io/badge/Audit-Verified-10b981?logo=shield" alt="Audit Verified"></a>
      ```
-   - Commit the certification in the package repository:
-     `chore(release): certify package release readiness and add audit badge`
+   - Commit the verification in the package repository:
+     `chore(release): record release gate verification snapshot and add audit badge`

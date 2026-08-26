@@ -72,7 +72,7 @@ Execute tooling:
 ---
 
 ## 5. Output Deliverables
-1. Machine-readable JSON: `<run-dir>/findings/composer.json` (adhering to `schema/agent-report.schema.json` with `agent_id: "composer"`).
+1. Machine-readable JSON: `<run-dir>/findings/composer.json` (adhering to `resources/schema/agent-report.schema.json` with `agent_id: "composer"`).
 2. Human-readable Markdown: `<run-dir>/reports/composer.md`.
 
 The Markdown report MUST contain:

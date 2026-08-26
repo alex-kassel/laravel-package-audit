@@ -79,7 +79,7 @@ Execute from repository root:
 ---
 
 ## 5. Output Deliverables
-1. Machine-readable JSON: `<run-dir>/findings/consumer_release.json` (adhering to `schema/agent-report.schema.json` with `agent_id: "consumer_release"`).
+1. Machine-readable JSON: `<run-dir>/findings/consumer_release.json` (adhering to `resources/schema/agent-report.schema.json` with `agent_id: "consumer_release"`).
 2. Human-readable Markdown: `<run-dir>/reports/consumer_release.md`.
 
 The Markdown report MUST contain:

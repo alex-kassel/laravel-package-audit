@@ -52,10 +52,10 @@ Execute tooling:
 ---
 
 ## 4. Mandatory Rules & Boundaries
-- **Dynamic Storage Contexts vs Static Publishing (Detection Signatures)**:
-  - **How to detect contextual packages**: Any package that depends on `alex-kassel/laravel-domain-core` (or a derived core engine), injects `DomainRegistryInterface`, calls `registerStorageContext()`, or extends `AbstractScrapingServiceProvider` is a **Contextual Domain/Capability Package**.
-  - For all such packages, migrations are resolved and applied dynamically into isolated multi-database contexts (`StorageContext::migrationPaths()`).
-  - **PROHIBITION**: The auditor MUST NEVER flag missing `$this->loadMigrationsFrom()` or missing `$this->publishes()` in ServiceProviders of any contextual domain/capability package as an issue. Static publishing violates domain isolation and pollutes host database schema.
+- **Dynamic / Programmatic Migration Management vs Static Publishing**:
+  - **Detection & Architectural Patterns**: Packages that manage migrations programmatically (e.g., via dynamic connection managers, custom migrators, tenant/domain isolation hooks, contextual storage managers, or exposed migration directory paths) rather than standard global auto-discovery.
+  - **Dynamic Execution Flexibility**: In such packages, migrations are executed programmatically within isolated database connections or custom lifecycle hooks. Automatic loading (`$this->loadMigrationsFrom()`) may or may not be present depending on the package's integration model.
+  - **PROHIBITION**: The auditor MUST NEVER flag missing `$this->loadMigrationsFrom()` or missing `$this->publishes()` for migrations in ServiceProviders of any package employing dynamic or programmatic migration management. Both states (auto-loaded or programmatically managed) are valid architectural designs and must be left as intended without forcing host database schema publishing.
 - **Tooling Boundary**: NEVER run `composer install` inside package subdirectories. Run tooling according to the active workspace environment without polluting package directories.
 - **READ-ONLY**: Never modify migration files or databases directly during Phase 1.
 - **Nuanced Severity**:
@@ -65,7 +65,7 @@ Execute tooling:
 ---
 
 ## 5. Output Deliverables
-1. Machine-readable JSON: `<run-dir>/findings/database.json` (adhering to `schema/agent-report.schema.json` with `agent_id: "database"`).
+1. Machine-readable JSON: `<run-dir>/findings/database.json` (adhering to `resources/schema/agent-report.schema.json` with `agent_id: "database"`).
 2. Human-readable Markdown: `<run-dir>/reports/database.md`.
 
 The Markdown report MUST contain:
