@@ -52,6 +52,10 @@ Execute tooling:
 ---
 
 ## 4. Mandatory Rules & Boundaries
+- **Dynamic Storage Contexts vs Static Publishing (Detection Signatures)**:
+  - **How to detect contextual packages**: Any package that depends on `alex-kassel/laravel-domain-core` (or a derived core engine), injects `DomainRegistryInterface`, calls `registerStorageContext()`, or extends `AbstractScrapingServiceProvider` is a **Contextual Domain/Capability Package**.
+  - For all such packages, migrations are resolved and applied dynamically into isolated multi-database contexts (`StorageContext::migrationPaths()`).
+  - **PROHIBITION**: The auditor MUST NEVER flag missing `$this->loadMigrationsFrom()` or missing `$this->publishes()` in ServiceProviders of any contextual domain/capability package as an issue. Static publishing violates domain isolation and pollutes host database schema.
 - **Tooling Boundary**: NEVER run `composer install` inside package subdirectories. Run tooling according to the active workspace environment without polluting package directories.
 - **READ-ONLY**: Never modify migration files or databases directly during Phase 1.
 - **Nuanced Severity**:

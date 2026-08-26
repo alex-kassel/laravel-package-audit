@@ -1,244 +1,153 @@
-# 🚀 Laravel Package Audit Framework
+<h1 align="center">🛡️ Laravel Package Audit Framework</h1>
 
-[![Latest Version](https://img.shields.io/github/v/tag/alex-kassel/laravel-package-audit?style=for-the-badge&logo=github&logoColor=white&label=version&color=f59e0b)](https://github.com/alex-kassel/laravel-package-audit/releases)
-[![Laravel Ecosystem](https://img.shields.io/badge/Laravel-11%20%7C%2012%20%7C%2013-e11d48?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com)
-[![PHP Platform](https://img.shields.io/badge/PHP-8.2%20%7C%208.3%20%7C%208.4-777bb4?style=for-the-badge&logo=php&logoColor=white)](https://php.net)
-[![License](https://img.shields.io/badge/License-MIT-0d9488?style=for-the-badge)](LICENSE)
+<p align="center">
+  <strong>Industrial pre-release verification and certification standard for modern Laravel & PHP packages</strong>
+</p>
 
-> **A structured, evidence-driven multi-agent quality assurance and release gating framework for Laravel and PHP packages.**
+<p align="center">
+  <a href="#-the-7-specialized-audit-gates">The 7 Audit Gates</a> •
+  <a href="#-the-2-phase-audit-lifecycle">2-Phase Lifecycle</a> •
+  <a href="#-ai-agent--skill-installation">Skill Installation</a> •
+  <a href="#-release-gate-certification">Certification Spec</a> •
+  <a href="#-examples">Examples</a> •
+  <a href="CHANGELOG.md">Changelog</a>
+</p>
 
----
-
-## 📖 Table of Contents
-
-- [Why This Framework Exists](#-why-this-framework-exists)
-- [Architecture & The 7 Specialized Audit Domains](#-architecture--the-7-specialized-audit-domains)
-- [The 2-Phase Lifecycle](#-the-2-phase-lifecycle)
-- [Quickstart Guide for Developers](#-quickstart-guide-for-developers)
-- [Release Gate Verdicts](#-release-gate-verdicts)
-- [Package Audit Badge & Release Certification](#-package-audit-badge--release-certification)
-- [Execution Modes: Standalone vs Monorepo Workspace](#-execution-modes-standalone-vs-monorepo-workspace)
-- [Directory & Artifact Layout](#-directory--artifact-layout)
-- [License & Attribution](#-license--attribution)
-
----
-
-## 🎯 Why This Framework Exists
-
-Developing and maintaining production-ready packages in the Laravel ecosystem requires rigorous quality standards. Whether releasing a new version, conducting major refactoring, or preparing for production deployment, packages frequently suffer from subtle, hard-to-detect defects:
-
-- **Host Container Pollution**: Overwriting host singletons without conditional guards (`bindIf`, `singletonIf`).
-- **Hidden BC Breaks & Leaked Internals**: Exposing internal implementation details that break consumers during minor updates.
-- **Supply Chain & Packaging Flaws**: Forgetting `export-ignore` in `.gitattributes`, causing test suites, `.env`, and CI workflows to be distributed via Packagist zip archives.
-- **Database Pitfalls**: Unprefixed generic table names colliding with host apps, unindexed foreign keys, or broken rollback scripts.
-- **Typing & Quality Deficits**: Hiding static analysis errors in `phpstan-baseline.neon` instead of fixing root typing problems.
-- **Broken Consumer Experience**: Quickstart README code snippets that fail upon fresh installation.
-
-The **Laravel Package Audit Framework** provides an automated, rigorous, and deterministic 360-degree inspection system powered by 7 specialized audit contracts. It operates strictly on **evidence over opinions**, categorizes findings by root cause, and provides a structured Human-in-the-Loop decision gate to make packages thoroughly reliable, secure, and maintainable.
+<p align="center">
+  <a href="https://github.com/alex-kassel/laravel-package-audit"><img src="https://img.shields.io/badge/Framework-v1.0.13-10b981?logo=shield" alt="Framework Version"></a>
+  <a href="https://laravel.com"><img src="https://img.shields.io/badge/Laravel-10%20%7C%2011%20%7C%2012%20%7C%2013-ff2d20?logo=laravel&logoColor=white" alt="Laravel Support"></a>
+  <a href="https://php.net"><img src="https://img.shields.io/badge/PHP-8.2+-777bb4?logo=php&logoColor=white" alt="PHP Support"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License"></a>
+</p>
 
 ---
 
-## 🛡️ Architecture & The 7 Specialized Audit Domains
+## 🌟 Overview
 
-The framework delegates audit tasks across 7 isolated specialist domains:
+**Laravel Package Audit Framework** is an open-source, deterministic verification specification designed for autonomous AI coding agents (Antigravity, Cursor, Claude Code, Windsurf, Copilot) and human maintainers to perform 360-degree quality audits on PHP/Laravel packages before publishing to Packagist.
 
-```text
-                                 ┌──────────────────────────────┐
-                                 │   Lead Audit Orchestrator    │
-                                 │      (orchestrator.md)       │
-                                 └──────────────┬───────────────┘
-                                                │
-         ┌──────────────┬──────────────┬────────┴─────┬──────────────┬──────────────┬──────────────┐
-         ▼              ▼              ▼              ▼              ▼              ▼              ▼
-   ┌───────────┐  ┌───────────┐  ┌───────────┐  ┌───────────┐  ┌───────────┐  ┌───────────┐  ┌───────────┐
-   │ Agent 01  │  │ Agent 02  │  │ Agent 03  │  │ Agent 04  │  │ Agent 05  │  │ Agent 06  │  │ Agent 07  │
-   │Architect. │  │   Code    │  │ Database  │  │ Security  │  │ Composer  │  │  Testing  │  │ Consumer  │
-   │   & API   │  │  Quality  │  │& Migration│  │& Isolation│  │& Packaging│  │& Compatib.│  │ & Release │
-   └─────┬─────┘  └─────┬─────┘  └─────┬─────┘  └─────┬─────┘  └─────┬─────┘  └─────┬─────┘  └─────┬─────┘
-         │              │              │              │              │              │              │
-         └──────────────┴──────────────┴───────┬──────┴──────────────┴──────────────┴──────────────┘
-                                               │
-                                       (JSON Validation)
-                                               ▼
-                                  ┌─────────────────────────┐
-                                  │   findings.json (Dedupe)│
-                                  │   decisions.md (Human)  │
-                                  │   RELEASE-GATE.md       │
-                                  │   DASHBOARD.md          │
-                                  └─────────────────────────┘
-```
-
-| Agent | Focus Domain | Key Checks & Deterministic Tools |
-|---|---|---|
-| **01 Architecture & API** | Public contract stability & Laravel integration | ServiceProvider `register()` vs `boot()`, container bindings, facades, DTOs, `@internal` encapsulation, SemVer boundaries. |
-| **02 Code Quality** | Static analysis, strict typing & cross-platform | `declare(strict_types=1);`, return/param types, Pint (`pint --test`), PHPStan (highest reasonable strictness), cross-platform path separators & PSR-4 case-sensitivity. |
-| **03 Database** | Migrations, DDL, queries & concurrency | `up()`/`down()` reversibility, table prefix collisions, index coverage, N+1 queries, transactions (`DB::transaction()`), multi-DB support. |
-| **04 Security & Isolation** | Vulnerabilities & host app containment | Container hijacking prevention, global config immutability, SQL/Command injection, cross-platform process safety, `composer audit`. |
-| **05 Composer & Supply Chain** | Manifest, dependencies & distribution zip | `composer validate --strict`, dependency segregation (`require` vs `require-dev`), `.gitattributes export-ignore` & LF line endings, `git archive` release check. |
-| **06 Testing & Matrix** | Test quality & boundary compatibility | PHPUnit/Pest with Testbench, dynamic `tests/bootstrap.php`, boundary matrix testing (`prefer-lowest` vs `prefer-stable`), cross-platform path assertions. |
-| **07 Consumer Release** | First-party integration & documentation | Isolated fresh-install smoke test (no parent vendor leakage), auto-discovery, `vendor:publish`, README code accuracy, `CHANGELOG.md`, `LICENSE`. |
+Every audited package is verified against **7 specialized domain contracts** and certified with an immutable `RELEASE-GATE.md` snapshot.
 
 ---
 
-## 🔄 The 2-Phase Lifecycle
+## 🔬 The 7 Specialized Audit Gates
 
-The audit framework operates in two distinct phases preceded by a bootstrap self-check:
+| # | Gate Domain | Focus Area | Deterministic Verification Standard |
+|:---:|---|---|---|
+| **01** | **Architecture & API** | Public surface & isolation | Backward compatibility, encapsulation, zero host framework leakage. |
+| **02** | **Code Quality & Types** | Static analysis & styling | PHPStan Level 8+, `declare(strict_types=1)`, Laravel Pint formatting. |
+| **03** | **Database & Storage** | Migrations & schema safety | Multi-connection isolation, isolated SQLite/MySQL test harness. |
+| **04** | **Security & Isolation** | Secrets & container safety | No credential leaks, service container pollution prevention, input sanitization. |
+| **05** | **Supply Chain & Composer** | Dependency integrity | `composer validate --strict`, `.gitattributes` export-ignore, strict SemVer bounds. |
+| **06** | **Testing & Compatibility** | Automated test matrix | Complete unit/feature test coverage across PHP 8.2–8.4 and Laravel 10–13. |
+| **07** | **Consumer DX & Release** | Developer experience | Canonical README, Keep-a-Changelog compliance, `RELEASE-GATE.md` certificate. |
+
+---
+
+## 🔄 The 2-Phase Audit Lifecycle
 
 ```mermaid
 flowchart TD
-    subgraph Phase 0 [Phase 0: Bootstrap, Self-Check & Tooling Gate]
-        S0[1. Verify Framework Integrity: schemas, contracts, templates] --> T0[2. Pre-flight Tooling Gate: phpunit, pint, phpstan]
-        T0 --> A[3. Environment Snapshot & Manifest Initialization]
+    subgraph Phase1["Phase 1: Read-Only Discovery & Assessment"]
+        A["Target Package"] --> B["Pre-flight Tooling Gate"]
+        B --> C["Execute 7 Domain Specialist Contracts"]
+        C --> D["Compile findings.json & audit-manifest.json"]
+        D --> E["Generate Human Decision Sheet (decisions.md)"]
     end
 
-    subgraph Phase 1 [Phase 1: Audit-Only & Read-Only]
-        A --> B[Run 7 Isolated Specialist Audits]
-        B --> C[Validate JSON Schemas & Deduplicate by root_cause_id]
-        C --> D[Compile FINAL-REPORT.md & RELEASE-GATE.md]
-        D --> E[Generate Human Decision Sheet decisions.md]
+    subgraph Decision["Human Decision Gate"]
+        E --> F{"Human Approval / Verdict"}
     end
 
-    subgraph Gate [Human Decision Gate]
-        E --> F{Engineer Reviews decisions.md}
-        F -->|Select: ACCEPT / FIX / IGNORE / DEFER| G[Confirmed Action Plan]
+    subgraph Phase2["Phase 2: Remediation & Certification"]
+        F -->|Approve Remediation| G["Sequential Remediation Graph"]
+        G --> H["Delta Verification (Pint, PHPStan, Tests)"]
+        H --> I["Freeze Certified RELEASE-GATE.md"]
+        I --> J["Tag SemVer & Publish to Packagist"]
     end
 
-    subgraph Phase 2 [Phase 2: Remediation & Delta-Audit]
-        G --> H[1. Build Dynamic Remediation Dependency Graph]
-        H --> I[2. Sequential Fixes with verification.command]
-        I --> J[3. Delta-Audit & Regression Suite Run]
-        J --> K[4. Verify Release Distribution Artifact & Final RELEASE-GATE.md]
-    end
+    F -->|Reject / Block| K["Halt Release (BLOCKED)"]
 ```
 
 ---
 
-## 🚀 Quickstart Guide for Developers
+## 🤖 AI Agent & Skill Installation
 
-### Step 1: Requesting an Audit
+This repository adheres to the universal Agentic Skill specification (`SKILL.md`). You can install it directly into your workspace for any AI coding assistant.
 
-Give a simple prompt to your AI coding assistant (Antigravity, Cursor, Claude Code, Copilot):
+### 1. For Google Antigravity & Workspace Agent Tools
+Copy the framework directly into your workspace skills directory:
+```bash
+# Inside your workspace root
+mkdir -p .agents/skills/package-audit
+git clone --depth 1 https://github.com/alex-kassel/laravel-package-audit .agents/skills/package-audit
+```
 
-> *"Run a full package audit for `<package-path>` strictly according to `.audit/orchestrator.md`. Execute Phase 1 (Audit-Only)."*
+### 2. For Cursor IDE
+```bash
+# Inside your Cursor workspace
+mkdir -p .cursor/skills/package-audit
+git clone --depth 1 https://github.com/alex-kassel/laravel-package-audit .cursor/skills/package-audit
+```
 
-The agent will automatically:
-1. Conduct **Phase 0 Framework Self-Check & Tooling Readiness Gate** (if essential tools like `phpstan` or `pint` are missing, it prompts you immediately with exact installation commands).
-2. Initialize run directory at `.audit/runs/<vendor>/<package-name>/<timestamp>/`.
-3. Execute all 7 specialist contracts in read-only mode.
-4. Validate and deduplicate findings into `findings.json`.
-5. Generate `FINAL-REPORT.md`, `RELEASE-GATE.md`, `decisions.md`, and update `DASHBOARD.md`.
+### 3. Prompting Your AI Assistant
+Once installed, simply request a full package audit in chat:
+> *"Run a full package audit on `packages/alex-kassel/my-package` using the package-audit skill."*
 
 ---
 
-### Step 2: Reviewing Decisions
+## 🚦 Release Gate Certification (`RELEASE-GATE.md`)
 
-Open `.audit/runs/<vendor>/<package-name>/latest/decisions.md`. You will see actionable architectural questions (typically 3–10 items) formatted with explicit choices:
+When an audit completes and all checks pass, the framework outputs an immutable `RELEASE-GATE.md` file in the package root. Packages link to this verification in their `README.md` via the canonical badge:
 
 ```markdown
-### [DB-001 / RC-MIGRATION-PREFIX]: Table `settings` is unprefixed
-- **Impact**: Could collide with host application `settings` table.
-- **Recommendation**: Make table prefix configurable via `config('package.table_prefix')`.
-- **Options**:
-  - [x] `FIX`: Refactor migration and model to support configurable prefix.
-  - [ ] `ACCEPT`: Accept risk (table name is an intentional public contract).
-  - [ ] `IGNORE`: Ignore (justify why).
-  - [ ] `DEFER`: Defer to next minor version.
+[![Audit Verified](https://img.shields.io/badge/Audit-Verified-10b981?logo=shield)](RELEASE-GATE.md)
 ```
 
-Mark your choices directly in the file.
+### Certified Attributes:
+* **Package Name & Target Version:** Certified SemVer version and commit SHA.
+* **Domain Assessment Grid:** Individual verdicts across all 7 verification domains.
+* **Deterministic Tool Evidence:** Exact output lines from PHPUnit, PHPStan, Pint, and Composer.
+* **Digital Audit Trail:** Machine-readable JSON summary for CI/CD gates.
 
 ---
 
-### Step 3: Triggering Remediation
-
-Instruct the agent:
-
-> *"Execute Phase 2 (Remediation) for `packages/<vendor>/<package-name>` based on confirmed decisions in `decisions.md`."*
-
-The agent will execute fixes along the **Remediation Dependency Graph**, run every finding's `verification.command`, conduct a delta regression audit, inspect the release archive, and issue the final `RELEASE-GATE.md`.
-
----
-
-## 🚦 Release Gate Verdicts
-
-Every audit produces a clear, deterministic release verdict:
-
-| Verdict | Meaning | Conditions Required |
-|:---:|---|---|
-| 🟢 **`READY`** | **No known release-blocking issues were found, and all required verification gates passed** | `0` Blockers, `0` Critical defects, all required audits `PASS`, all human decisions resolved, verified compatibility, clean distribution archive. |
-| 🟡 **`CONDITIONAL`** | **Approved with documented risks or minor pending items** | `0` Blockers, `0` Critical defects, non-critical decisions pending or explicitly accepted architectural tradeoffs. |
-| 🔴 **`BLOCKED`** | **Release MUST NOT proceed** | `>= 1` Blocker or Critical finding, broken Composer install/discovery, fatal security flaw, migration failure, or failed essential audit. |
-
----
-
-## 🛡️ Package Audit Badge & Release Certification
-
-When a package passes all release gates and achieves the 🟢 **`READY`** verdict in Phase 2:
-1. The final `RELEASE-GATE.md` report is placed directly in the package's root repository.
-2. The official verification badge is placed in the package's `README.md`:
-
-```markdown
-<a href="RELEASE-GATE.md"><img src="https://img.shields.io/badge/Audit-Verified-10b981?logo=shield" alt="Audit Verified"></a>
-```
-
-**Transparent Two-Step Verification Flow**:
-- **Step 1 (Package `README.md` ➔ `RELEASE-GATE.md`)**: A developer clicking the badge in your package repository immediately views the certified audit report with verified test results, static analysis coverage, and security checks.
-- **Step 2 (`RELEASE-GATE.md` ➔ Audit Framework)**: The report header links directly to [alex-kassel/laravel-package-audit](https://github.com/alex-kassel/laravel-package-audit), allowing developers to inspect the full audit framework and adopt it for their own packages.
-
----
-
-## 🧩 Execution Modes: Standalone vs Monorepo Workspace
-
-The framework is **universal and repository-agnostic**:
-
-1. **Standalone Package Mode (Default)**:
-   - When auditing a standalone package repository, tools run within the package's own context and isolated dependencies.
-
-2. **Monorepo / Workspace Adapter (Optional)**:
-   - In local monorepo setups (such as Laravel host applications developing multiple internal packages), test runners can optionally use the host root `vendor/` via a dynamic autoloader (`tests/bootstrap.php`) for rapid local iteration.
-   - **Critical Isolation Rule**: Regardless of monorepo tooling, the Consumer Release Agent (Agent 07) MUST verify that the package resolves runtime dependencies independently without leaking undeclared parent packages.
-
----
-
-## 📁 Directory & Artifact Layout
+## 📁 Repository Structure
 
 ```text
-.audit/
-├── DASHBOARD.md                    # 🌟 Monorepo Audit Registry & Live Dashboard
-├── README.md                       # Framework guide & execution manual (this file)
-├── AGENTS.md                       # AI Agent Guidelines & Architecture Map
-├── orchestrator.md                 # Master Orchestrator Contract
-├── audit-manifest.template.json    # Environment snapshot template
-│
-├── schema/
-│   ├── finding.schema.json         # JSON schema for findings (severity, root_cause_id, verification)
-│   └── agent-report.schema.json    # JSON schema for agent reports (status, tools_run, tools_missing)
-│
-├── agents/                         # 7 specialized audit contracts
-│   ├── 01_architecture_api.md
-│   ├── 02_code_quality.md
-│   ├── 03_database.md
-│   ├── 04_security_isolation.md
-│   ├── 05_composer_supply_chain.md
-│   ├── 06_testing_compatibility.md
-│   └── 07_consumer_release.md
-│
-└── runs/                           # 📂 Historical & Latest Audit Outputs by Package
-    └── <vendor>/
-        └── <package-name>/
-            ├── latest/             # Mirror of latest completed audit
-            │   ├── audit-manifest.json
-            │   ├── findings.json
-            │   ├── decisions.md
-            │   ├── FINAL-REPORT.md
-            │   ├── RELEASE-GATE.md
-            │   ├── findings/       # (01_architecture.json, 02_code_quality.json ...)
-            │   └── reports/        # (01_architecture.md, 02_code_quality.md ...)
-            └── <YYYY-MM-DD_HH-mm-ss>/ # Immutable historical audit snapshots
+├── SKILL.md                  # Universal AI Agent Skill entry point
+├── references/               # Knowledge base & domain contracts
+│   ├── orchestrator.md       # Master Orchestrator contract & execution lifecycle
+│   ├── audit-contracts.md    # Index of specialized contracts
+│   └── agents/               # 7 specialized domain agent contracts (01 to 07)
+├── resources/                # Schemas and report templates
+│   ├── schema/               # JSON Schema Draft-07 (findings, agent reports)
+│   └── templates/            # audit-manifest & RELEASE-GATE.md templates
+├── examples/                 # Real-world certified audit runs and snapshots
+├── CHANGELOG.md              # Framework version history
+└── LICENSE                   # MIT License
 ```
 
 ---
 
-## 📄 License & Attribution
+## 📄 Examples
 
-Distributed under the **MIT License**. Created for high-assurance package engineering in the Laravel ecosystem.
+Inspect [examples/scraper-core/](examples/scraper-core/) to see an end-to-end audit artifact run, including `findings.json`, `decisions.md`, `FINAL-REPORT.md`, and the certified `RELEASE-GATE.md`.
+
+---
+
+## 📜 Changelog
+
+Please see [CHANGELOG.md](CHANGELOG.md) for details on framework updates and release versions.
+
+---
+
+## 👤 Author & Maintainer
+
+* **Alexander Macenko** ([@alex-kassel](https://github.com/alex-kassel)) — Author & Framework Steward
+
+---
+
+## ⚖️ License
+
+The MIT License (MIT). Please see [LICENSE](LICENSE) for more information.
