@@ -90,4 +90,17 @@ return [
     |
     */
     'certificate_filename' => 'AUDIT.json',
+
+    /*
+    |--------------------------------------------------------------------------
+    | AI Agent Skill Settings
+    |--------------------------------------------------------------------------
+    |
+    | Configuration for installing and discovering the Package Audit skill.
+    | When auto_publish_skill is enabled, the skill is automatically materialized
+    | into the detected skills directory during local console discovery.
+    |
+    */
+    'skills_path' => null, // null for auto-detection (.agents/skills or .cursor/skills)
+    'auto_publish_skill' => true,
 ];
