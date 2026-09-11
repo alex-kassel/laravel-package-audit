@@ -4,10 +4,10 @@
     "package": "alex-kassel/laravel-package-audit",
     "version": "1.2.0",
     "audit": {
-        "commit": "023879023e041010c60e58f23f79d9024400f35a",
-        "tree_hash": "18f054b2e09f2cb7181028b3d446f6364aefe1dc",
+        "commit": "b6f32edd7dee28d65edad9f63b974a33302e06c5",
+        "tree_hash": "849959f89d59af6229e200511052fbf5d0bff3c4",
         "branch": "main",
-        "timestamp": "2026-09-11T17:37:49+00:00",
+        "timestamp": "2026-09-11T17:41:42+00:00",
         "environment": {
             "php": "8.4.24",
             "laravel": "13.31.0",
@@ -18,20 +18,20 @@
         "git_cleanliness": {
             "check": "git_cleanliness",
             "status": "passed",
-            "output": "Working tree is clean. Commit: 023879023e041010c60e58f23f79d9024400f35a, Branch: main",
-            "duration_seconds": 0.657
+            "output": "Working tree is clean. Commit: b6f32edd7dee28d65edad9f63b974a33302e06c5, Branch: main",
+            "duration_seconds": 0.654
         },
         "composer_validate": {
             "check": "composer_validate",
             "status": "passed",
             "output": "./composer.json is valid",
-            "duration_seconds": 1.277
+            "duration_seconds": 1.312
         },
         "pint": {
             "check": "pint",
             "status": "passed",
             "output": "{\"tool\":\"pint\",\"result\":\"passed\"}",
-            "duration_seconds": 1.071
+            "duration_seconds": 1.268
         },
         "phpstan": {
             "check": "phpstan",
@@ -42,14 +42,14 @@
         "tests": {
             "check": "tests",
             "status": "passed",
-            "output": "{\"tool\":\"phpunit\",\"result\":\"passed\",\"tests\":27,\"passed\":27,\"assertions\":103,\"duration_ms\":1014}",
-            "duration_seconds": 1.656
+            "output": "{\"tool\":\"phpunit\",\"result\":\"passed\",\"tests\":27,\"passed\":27,\"assertions\":103,\"duration_ms\":946}",
+            "duration_seconds": 1.465
         },
         "isolated": {
             "check": "isolated",
             "status": "passed",
-            "output": "PHPUnit 12.5.35 by Sebastian Bergmann and contributors.\r\n\r\nRuntime:       PHP 8.4.24\nConfiguration: C:\\Users\\Alex\\AppData\\Local\\Temp\\package-audit-337e356234710673\\phpunit.xml.dist\n\r\n...\u001b[33;1mN\u001b[0m..............\u001b[33;1mN\u001b[0m\u001b[33;1mN\u001b[0m\u001b[33;1mN\u001b[0m......                                       27 / 27 (100%)\r\n\r\nTime: 00:01.018, Memory: 44.00 MB\r\n\r\n\u001b[30;43mOK, but there were issues!\u001b[0m\r\n\u001b[30;43mTests: 27\u001b[0m\u001b[30;43m, Assertions: 103\u001b[0m\u001b[30;43m, PHPUnit Notices: 4\u001b[0m\u001b[30;43m.\u001b[0m",
-            "duration_seconds": 52.415
+            "output": "PHPUnit 12.5.35 by Sebastian Bergmann and contributors.\r\n\r\nRuntime:       PHP 8.4.24\nConfiguration: C:\\Users\\Alex\\AppData\\Local\\Temp\\package-audit-6c265bfe3c515109\\phpunit.xml.dist\n\r\n...\u001b[33;1mN\u001b[0m..............\u001b[33;1mN\u001b[0m\u001b[33;1mN\u001b[0m\u001b[33;1mN\u001b[0m......                                       27 / 27 (100%)\r\n\r\nTime: 00:01.189, Memory: 44.00 MB\r\n\r\n\u001b[30;43mOK, but there were issues!\u001b[0m\r\n\u001b[30;43mTests: 27\u001b[0m\u001b[30;43m, Assertions: 103\u001b[0m\u001b[30;43m, PHPUnit Notices: 4\u001b[0m\u001b[30;43m.\u001b[0m",
+            "duration_seconds": 63.992
         },
         "readme": {
             "check": "readme",
@@ -65,5 +65,5 @@
         }
     },
     "verdict": "PASSED",
-    "fingerprint": "sha256:fbb61067c96ef31d75d2a66170f42bb5fd3c3c8fbe368a8de3616e8f9eb9fa37"
+    "fingerprint": "sha256:c3a6df17998fa00c6ddb14b668a8f2408c3e8ae61050a957db20486bf41c2b53"
 }
