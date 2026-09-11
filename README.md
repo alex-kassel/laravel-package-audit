@@ -5,21 +5,24 @@
 </p>
 
 <p align="center">
-  <a href="#-why-this-exists">Why This Exists</a> •
-  <a href="#-quickstart">Quickstart</a> •
-  <a href="#-how-it-works-the-hybrid-model">How It Works</a> •
-  <a href="#-the-7-audit-contracts">7 Audit Contracts</a> •
-  <a href="#-the-8-automated-quality-gates">8 Quality Gates</a> •
-  <a href="#-cryptographic-certification">Certification</a> •
-  <a href="#-configuration">Configuration</a> •
-  <a href="#-license">License</a>
-</p>
-
-<p align="center">
-  <a href="https://github.com/alex-kassel/laravel-package-audit"><img src="https://img.shields.io/badge/Release-v1.0.0-10b981?logo=shield" alt="Framework Version"></a>
+  <a href="AUDIT.json"><img src="https://img.shields.io/badge/Audit-Verified-10b981?logo=shield" alt="Audit Verified"></a>
+  <a href="https://github.com/alex-kassel/laravel-package-audit"><img src="https://img.shields.io/badge/Release-v1.2.0-10b981?logo=shield" alt="Version"></a>
   <a href="https://laravel.com"><img src="https://img.shields.io/badge/Laravel-11%20%7C%2012-ff2d20?logo=laravel&logoColor=white" alt="Laravel Support"></a>
   <a href="https://php.net"><img src="https://img.shields.io/badge/PHP-8.2+-777bb4?logo=php&logoColor=white" alt="PHP Support"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License"></a>
+</p>
+
+<p align="center">
+  <a href="#-why-this-exists">Why This Exists</a> •
+  <a href="#-quickstart">Quickstart</a> •
+  <a href="#-requirements">Requirements</a> •
+  <a href="#-installation">Installation</a> •
+  <a href="#-usage">Usage</a> •
+  <a href="#-the-7-audit-contracts">7 Contracts</a> •
+  <a href="#-the-8-automated-quality-gates">8 Gates</a> •
+  <a href="#-cryptographic-certification">Certification</a> •
+  <a href="#-testing">Testing</a> •
+  <a href="#-license">License</a>
 </p>
 
 ---
@@ -39,19 +42,9 @@ Testing Laravel packages is notoriously hard:
 
 ## ⚡ Quickstart
 
-### 1. Install the Package
+### In Agent Chat (Antigravity, Cursor, Claude Code)
 
-Require the package as a development dependency in your Laravel host application:
-
-```bash
-composer require --dev alex-kassel/laravel-package-audit
-```
-
-> **Zero-Touch Auto-Materialization:** Upon `composer require`, Laravel runs `package:discover`, and the package **automatically materializes** the agent skill into your `.agents/skills/package-audit/` directory. AI agents (Antigravity, Cursor, Claude Code) immediately recognize it in your next session.
-
-### 2. Using with an AI Agent (Recommended)
-
-In your agent chat (Antigravity, Cursor, Claude Code), simply say:
+Simply tell your agent:
 
 ```text
 "Audit packages/my-vendor/my-package"
@@ -59,16 +52,14 @@ In your agent chat (Antigravity, Cursor, Claude Code), simply say:
 "Run a full package audit and prepare release certification"
 ```
 
-The agent will autonomously:
-1. Run the mechanical baseline via CLI in non-mutating mode.
-2. Review the codebase against the 7 specialized audit contracts.
+The agent will autonomously execute the 2-Phase Lifecycle:
+1. Collect mechanical baseline results via non-mutating CLI.
+2. Evaluate the package against the 7 specialized audit contracts.
 3. Present a structured **3-Section Report** (Baseline, Planned Fixes, and Architectural Decisions with explicit `(Recommended)` rationales).
 4. **🛑 STOP (Human Gate)**: Wait for your approval before modifying any code.
 5. Upon approval, apply atomic semantic fixes and issue the cryptographic `AUDIT.json` certificate.
 
-### 3. Using via Artisan CLI (Direct / CI)
-
-You can also run audits directly from the command line without an agent:
+### In Terminal (Artisan CLI)
 
 ```bash
 # Run full audit and certify with AUDIT.json
@@ -77,9 +68,69 @@ php artisan package:audit packages/my-vendor/my-package
 # Run audit in dry-run / inspect mode (read-only)
 php artisan package:audit packages/my-vendor/my-package --no-commit --json
 
-# Verify authenticity and integrity of a certified package
+# Verify authenticity and integrity of an existing audit certificate
 php artisan package:audit packages/my-vendor/my-package --verify
 ```
+
+---
+
+## 📋 Requirements
+
+- **PHP**: 8.2 or higher (fully compatible with PHP 8.3 and PHP 8.4)
+- **Laravel Framework**: 11.0 or 12.0
+- **Git**: Installed and available in PATH
+- **Composer**: 2.2 or higher
+
+---
+
+## 📦 Installation
+
+Require the package as a development dependency in your Laravel host application:
+
+```bash
+composer require --dev alex-kassel/laravel-package-audit
+```
+
+> **Zero-Touch Auto-Materialization:** Upon `composer require`, Laravel runs `package:discover`, and the package **automatically materializes** the agent skill into your `.agents/skills/package-audit/` directory. AI agents (Antigravity, Cursor, Claude Code) immediately recognize it in your next session without any manual setup.
+
+Optionally, publish configuration or CI workflow:
+
+```bash
+php artisan vendor:publish --tag=package-audit-config
+php artisan vendor:publish --tag=package-audit-stubs
+```
+
+---
+
+## 💻 Usage
+
+### Auditing & Certifying a Package
+
+To audit a local package and issue an `AUDIT.json` certificate:
+
+```bash
+php artisan package:audit packages/vendor/package-name
+```
+
+Options:
+- `--target-version=1.2.0`: Explicitly specify the release version for the certificate.
+- `--no-commit`: Generate `AUDIT.json` without creating git commits.
+- `--no-tag`: Commit `AUDIT.json` to git, but do not create git tags.
+- `--json`: Output machine-readable JSON summary for CI/CD pipelines.
+
+### Verifying a Certified Package
+
+To verify that a package's `AUDIT.json` certificate is authentic and source code has not drifted:
+
+```bash
+php artisan package:audit packages/vendor/package-name --verify
+```
+
+Verdicts:
+- **`VERIFIED`**: Exact match. The Git tree hash and normalized tool outputs match the certificate.
+- **`FORGED`**: The certificate was manually modified or check outputs differ.
+- **`OUTDATED`**: Commits have modified source files since the audit was certified.
+- **`MISSING`**: No `AUDIT.json` certificate found in package root.
 
 ---
 
@@ -155,12 +206,6 @@ The resulting `AUDIT.json` is committed to the package. Anyone can verify it any
 php artisan package:audit packages/my-vendor/my-package --verify
 ```
 
-Verdicts:
-- **`VERIFIED`**: Exact match. The package is authentic and untampered.
-- **`FORGED`**: The certificate was manually modified or check outputs differ.
-- **`OUTDATED`**: Commits have modified source files since the audit was issued.
-- **`MISSING`**: No certificate found.
-
 ---
 
 ## 🛠️ Skill Management CLI
@@ -179,13 +224,6 @@ php artisan package:audit:install --symlink
 
 # Install into a custom directory
 php artisan package:audit:install --path=.custom/skills
-```
-
-Standard Laravel publishing tags are also available:
-```bash
-php artisan vendor:publish --tag=package-audit-skill
-php artisan vendor:publish --tag=package-audit-config
-php artisan vendor:publish --tag=package-audit-stubs
 ```
 
 ---

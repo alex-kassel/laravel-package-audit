@@ -27,11 +27,11 @@ class AuditRunner
     /**
      * Run all audit checks on the package and generate an AuditReport.
      */
-    public function audit(string $packagePath): AuditReport
+    public function audit(string $packagePath, ?string $targetVersion = null): AuditReport
     {
         $realPackagePath = $this->normalizePath($packagePath);
         $packageName = $this->resolvePackageName($realPackagePath);
-        $version = $this->resolvePackageVersion($realPackagePath);
+        $version = $targetVersion ?? $this->resolvePackageVersion($realPackagePath);
 
         $checks = [];
 

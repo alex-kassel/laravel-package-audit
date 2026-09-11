@@ -1,16 +1,24 @@
 {
     "name": "alex-kassel/laravel-package-audit",
-    "description": "Self-contained pre-release audit and tamper-proof certification package for Laravel and PHP packages.",
+    "description": "Autonomous AI Agent Skill and deterministic pre-release certification engine for Laravel and PHP packages.",
     "license": "MIT",
     "type": "library",
     "keywords": [
         "laravel",
-        "package",
-        "audit",
+        "package-audit",
+        "ai-agent",
+        "skills",
+        "code-quality",
         "verification",
-        "quality",
-        "certification"
+        "certification",
+        "tamper-proof",
+        "testing"
     ],
+    "homepage": "https://github.com/alex-kassel/laravel-package-audit",
+    "support": {
+        "issues": "https://github.com/alex-kassel/laravel-package-audit/issues",
+        "source": "https://github.com/alex-kassel/laravel-package-audit"
+    },
     "authors": [
         {
             "name": "Alexander Macenko",

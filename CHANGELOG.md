@@ -5,6 +5,21 @@ All notable changes to the **Laravel Package Audit Framework** are documented in
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-09-11
+
+### Added
+- Complete standalone transformation: decoupled from workspace dev-toolkits and runnable in any Laravel 11 or 12 project.
+- Deterministic CLI quality engine (`php artisan package:audit`) with 8 automated quality gates.
+- Cryptographic, tamper-proof audit certification (`AUDIT.json`) keyed to Git `tree_hash` and normalized check output fingerprints.
+- Mathematical certificate verification command (`php artisan package:audit --verify`).
+- Smart Single-Target Skill Installer (`php artisan package:audit:install`) supporting `--force`, `--symlink`, and `--path`.
+- Zero-Touch Auto-Materialization into `.agents/skills/package-audit/` upon Composer discovery.
+- Seven updated specialized audit contracts adhering to the "Laravel First" philosophy.
+
+### Changed
+- Refactored `SKILL.md` to be fully portable and self-bootstrapping.
+- Balanced documentation layout combining user-focused narrative with strict canonical structure.
+
 ## [1.1.0] - 2026-08-26
 
 ### Added

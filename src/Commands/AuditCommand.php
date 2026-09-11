@@ -23,7 +23,9 @@ class AuditCommand extends Command
         {path=. : Path to the package directory}
         {--verify : Verify an existing audit certificate}
         {--json : Output machine-readable JSON}
-        {--no-commit : Skip git tag creation and committing AUDIT.json}';
+        {--target-version= : Explicit release version for the certificate}
+        {--no-commit : Skip git tag creation and committing AUDIT.json}
+        {--no-tag : Do not create git tag during commit}';
 
     /**
      * The console command description.
@@ -68,7 +70,11 @@ class AuditCommand extends Command
      */
     protected function handleAudit(string $packagePath): int
     {
-        $report = $this->runner->audit($packagePath);
+        $targetVersion = is_string($this->option('target-version')) && $this->option('target-version') !== ''
+            ? (string) $this->option('target-version')
+            : null;
+
+        $report = $this->runner->audit($packagePath, $targetVersion);
 
         if ($this->option('json')) {
             $this->line($report->toJson());
@@ -112,15 +118,19 @@ class AuditCommand extends Command
         if (! $this->option('no-commit')) {
             $gitDir = $packagePath.DIRECTORY_SEPARATOR.'.git';
             if (File::isDirectory($gitDir) || File::isFile($gitDir)) {
-                $tagPrefix = (string) (Config::get('package-audit.git.tag_prefix') ?? 'audit/v');
-                $tag = $tagPrefix.$report->version;
-                Process::path($packagePath)->run(['git', 'tag', '-f', $tag, 'HEAD']);
+                $tagAction = '';
+                if (! $this->option('no-tag')) {
+                    $tagPrefix = (string) (Config::get('package-audit.git.tag_prefix') ?? 'audit/v');
+                    $tag = $tagPrefix.$report->version;
+                    Process::path($packagePath)->run(['git', 'tag', '-f', $tag, 'HEAD']);
+                    $tagAction = "tagged ({$tag}) and ";
+                }
                 Process::path($packagePath)->run(['git', 'add', $certFilename]);
 
                 $commitTemplate = (string) (Config::get('package-audit.git.commit_message') ?? 'Audit certificate for v{version}');
                 $commitMsg = str_replace(['{version}', '{package}'], [$report->version, $report->package], $commitTemplate);
                 Process::path($packagePath)->run(['git', 'commit', '-m', $commitMsg]);
-                $gitAction = "tagged ({$tag}) and committed";
+                $gitAction = "{$tagAction}committed";
             }
         }
 
