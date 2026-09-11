@@ -1,15 +1,20 @@
----
+﻿---
 name: package-audit
+origin: alex-kassel/laravel-package-audit
+version: 1.2.1
 description: >-
-  Use this skill when auditing, certifying, or verifying quality of PHP/Laravel packages
-  (e.g., "проведи полный аудит пакета", "полный аудит", "audit package", "run package audit").
+  Use this skill EXCLUSIVELY when the user explicitly requests a full package audit and release certification
+  (e.g., "проведи полный аудит пакета", "полный аудит перед релизом", "audit package", "certify package").
 ---
 
-# Package Audit & Certification Skill
+# Package Audit & Release Certification Skill
 
-This skill provides an autonomous, industrial audit and certification framework for Laravel/PHP packages. It couples deterministic mechanical CLI verification with deep cognitive architectural evaluation guided by the "Laravel First" philosophy.
-
-The skill is **fully standalone**: it can be distributed as a standalone skill unit (e.g. copied to `.agents/skills/package-audit/` in any project) and automatically bootstraps the required tooling.
+> [!IMPORTANT]
+> **AUDIT ACTIVATION CONTRACT & TOKEN CONSERVATION RULE**:
+> This skill is an expensive, high-rigor governance procedure reserved strictly for formal release certification.
+> - **DO NOT INVOKE OR EXECUTE THIS SKILL** during routine feature development, bugfixing, refactoring, or patch updates (`1.2.0` -> `1.2.1`).
+> - For everyday quality checks, use `php artisan package:check <pkg> --quick` or `composer test` instead.
+> - Execute this procedure **ONLY** when the human user explicitly instructs: *"проведи полный аудит"*, *"подготовь релизную сертификацию"*, *"certify package for release"*.
 
 ---
 
@@ -33,7 +38,7 @@ The skill is **fully standalone**: it can be distributed as a standalone skill u
 ## Operational Workflow
 
 ### Phase 0: Tooling Verification & Self-Bootstrapping
-When the skill is invoked, the agent checks if `php artisan package:audit` is available:
+When explicitly invoked by the human user, check if `php artisan package:audit` is available:
 ```bash
 php artisan list package:audit
 ```
@@ -43,14 +48,14 @@ php artisan list package:audit
   ```bash
   composer require --dev alex-kassel/laravel-package-audit
   ```
-- **Direct CLI Fallback**: If the environment prevents installing composer packages, the agent directly executes the underlying tools (`vendor/bin/pint --test`, `vendor/bin/phpstan`, `vendor/bin/phpunit`, `composer validate --strict`).
+- **Direct CLI Fallback**: If the environment prevents installing composer packages, directly execute the underlying tools (`vendor/bin/pint --test`, `vendor/bin/phpstan`, `vendor/bin/phpunit`, `composer validate --strict`).
 
 ---
 
-### Phase 1: Audit-Only & Human Decision Gate (Read-Only)
+### Phase 1: Cognitive Audit & Mandatory Human Gate (Read-Only)
 
 1. **Mechanical Baseline Diagnosis**:
-   Run the package audit in non-mutating mode:
+   Run the package audit in inspect mode (no certification issued):
    ```bash
    php artisan package:audit <path/to/package> --json --no-commit
    ```
@@ -58,34 +63,34 @@ php artisan list package:audit
    Inspect the package code against the 7 specialized contracts in [`references/contracts/`](./references/contracts/).
 3. **Compile Local Review Artifacts**:
    Store diagnostic details in `.audit/<timestamp>/`:
-   - `decisions.md`: Architectural questions, API breaking changes, and table prefix choices.
-   - `FINAL-REPORT.md`: Comprehensive domain findings and metrics.
-4. **Mandatory 3-Section Chat Output Protocol**:
-   The agent MUST present findings to the user formatted into 3 distinct sections:
-   - **Section 1: Test & Tooling Baseline**: Exact command execution results (Git, Pint, PHPStan, Tests, Composer, Sandbox).
-   - **Section 2: Mechanical & Routine Fixes**: Non-invasive fixes planned for Phase 2 (Pint formatting, PHPStan type annotations, missing docblocks, syntax cleanups).
-   - **Section 3: Human Decisions & Architectural Interventions**: High-impact items requiring human confirmation (API modifications, adding/removing public methods, schema alterations).
-     - **Mandatory Technical Recommendation & Rationale**: For every non-obvious point or dilemma, the agent MUST state its explicit recommendation (`(Recommended)`) accompanied by concrete technical justification.
-5. **🛑 MANDATORY HUMAN GATE (HARD STOP)**:
-   - **Zero Code Modification**: The agent is **strictly prohibited** from modifying source files, running mutating commands, creating git commits, or proceeding to Phase 2 in the same turn.
-   - The agent **MUST stop calling tools and end the turn** immediately after outputting the Phase 1 report, awaiting user confirmation.
+   - `01_baseline_inspection.md`
+   - `02_remediation_plan.md`
+4. **Compile Structured 3-Section Report for the Human**:
+   - **Section 1: Baseline Findings & Risk Assessment**
+   - **Section 2: Planned Automated Fixes**
+   - **Section 3: Architectural Decisions Requiring Explicit Choice**
+5. **🛑 MANDATORY STOP (Human Gate)**:
+   **DO NOT PROCEED. DO NOT MODIFY CODE. DO NOT GENERATE CERTIFICATE.**
+   Present the report to the user and wait for explicit confirmation.
 
 ---
 
-### Phase 2: Remediation & Certification (After User Confirmation)
+### Phase 2: Remediation, Commit & Cryptographic Certification
 
-1. **Sequential Remediation Graph**:
-   Execute fixes in order: Schema/Migrations → Public API & ServiceProvider → Code quality & types → Tests.
-2. **Atomic Semantic Commits**:
-   Create atomic commits for discrete defect groups (`fix(types): ...`, `style: ...`, `chore: ...`).
-3. **Certification & Cryptographic Receipt**:
-   Run the certifying audit:
+Once the human user confirms and approves the plan:
+1. **Apply Atomic Remediation**:
+   Execute the approved fixes in logical order (Code Quality -> Architecture -> Tests -> Docs).
+2. **Create Release Commit**:
+   Stage changes and create a clean git commit representing the audited release milestone:
    ```bash
-   php artisan package:audit <path/to/package>
+   git add .
+   git commit -m "release: prepare audited release v{version}"
    ```
-   - Automatically generates the tamper-proof `AUDIT.json` certificate recording Git `tree_hash` and normalized check output fingerprints.
-4. **Verification**:
-   Verify certificate integrity:
+3. **Mechanical Verification & Cryptographic Certification**:
+   Execute final certification against the committed state:
    ```bash
-   php artisan package:audit <path/to/package> --verify
+   php artisan package:audit <path/to/package> --target-version={version}
    ```
+   This issues the tamper-proof **`AUDIT.json`** anchored to the immutable Git `tree_hash` and commit.
+4. **Archive Run Artifacts**:
+   Save `FINAL-REPORT.md` into `.audit/<timestamp>/` for local audit trail.
