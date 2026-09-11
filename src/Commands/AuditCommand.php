@@ -112,10 +112,14 @@ class AuditCommand extends Command
         if (! $this->option('no-commit')) {
             $gitDir = $packagePath.DIRECTORY_SEPARATOR.'.git';
             if (File::isDirectory($gitDir) || File::isFile($gitDir)) {
-                $tag = "audit/v{$report->version}";
+                $tagPrefix = (string) (Config::get('package-audit.git.tag_prefix') ?? 'audit/v');
+                $tag = $tagPrefix.$report->version;
                 Process::path($packagePath)->run(['git', 'tag', '-f', $tag, 'HEAD']);
                 Process::path($packagePath)->run(['git', 'add', $certFilename]);
-                Process::path($packagePath)->run(['git', 'commit', '-m', "Audit certificate for v{$report->version}"]);
+
+                $commitTemplate = (string) (Config::get('package-audit.git.commit_message') ?? 'Audit certificate for v{version}');
+                $commitMsg = str_replace(['{version}', '{package}'], [$report->version, $report->package], $commitTemplate);
+                Process::path($packagePath)->run(['git', 'commit', '-m', $commitMsg]);
                 $gitAction = "tagged ({$tag}) and committed";
             }
         }

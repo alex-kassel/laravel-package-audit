@@ -93,7 +93,7 @@ class AuditRunner
 
         $environment = [
             'php' => PHP_VERSION,
-            'laravel' => function_exists('app') && app() instanceof Application ? app()->version() : '12.x',
+            'laravel' => function_exists('app') && app() instanceof Application ? app()->version() : (defined(Application::class.'::VERSION') ? Application::VERSION : 'unknown'),
             'os' => strtolower(PHP_OS_FAMILY),
         ];
 
@@ -108,7 +108,7 @@ class AuditRunner
             checks: $checks,
             verdict: $verdict,
             fingerprint: $fingerprint,
-            auditorVersion: '1.0.0',
+            auditorVersion: \AlexKassel\PackageAudit\PackageAuditServiceProvider::VERSION,
         );
     }
 
@@ -253,7 +253,8 @@ class AuditRunner
             }
         }
 
-        $command = [$phpstanBin, 'analyse', '--memory-limit=1G'];
+        $memoryLimit = (string) (Config::get('package-audit.checks.phpstan.memory_limit') ?? '1G');
+        $command = [$phpstanBin, 'analyse', '--memory-limit='.$memoryLimit];
 
         if ($neonFile !== null) {
             $command[] = '--configuration='.$neonFile;
@@ -323,15 +324,16 @@ class AuditRunner
         }
 
         $command = [$runner, '-c', $phpunitXml, '--fail-on-empty-test-suite'];
-        $env = [
+        $env = (array) (Config::get('package-audit.test_environment') ?? [
             'APP_ENV' => 'testing',
             'CACHE_STORE' => 'array',
             'SESSION_DRIVER' => 'array',
             'QUEUE_CONNECTION' => 'sync',
             'MAIL_MAILER' => 'array',
-        ];
+        ]);
+        $timeout = (int) (Config::get('package-audit.timeouts.tests') ?? 120);
 
-        $process = Process::path(base_path())->env($env)->run($command);
+        $process = Process::path(base_path())->timeout($timeout)->env($env)->run($command);
         $duration = (float) round(microtime(true) - $startTime, 3);
         $output = trim($process->output()."\n".$process->errorOutput());
 
@@ -418,25 +420,30 @@ class AuditRunner
             }
 
             // Step 4 & 5: Setup isolated environment
-            $env = [
-                'COMPOSER_HOME' => $tempDir.DIRECTORY_SEPARATOR.'composer-home',
-                'COMPOSER_VENDOR_DIR' => $tempDir.DIRECTORY_SEPARATOR.'vendor',
-                'COMPOSER_BIN_DIR' => $tempDir.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'bin',
+            $testEnv = (array) (Config::get('package-audit.test_environment') ?? [
                 'APP_ENV' => 'testing',
                 'CACHE_STORE' => 'array',
                 'SESSION_DRIVER' => 'array',
                 'QUEUE_CONNECTION' => 'sync',
                 'MAIL_MAILER' => 'array',
-            ];
+            ]);
+
+            $env = array_merge($testEnv, [
+                'COMPOSER_HOME' => $tempDir.DIRECTORY_SEPARATOR.'composer-home',
+                'COMPOSER_VENDOR_DIR' => $tempDir.DIRECTORY_SEPARATOR.'vendor',
+                'COMPOSER_BIN_DIR' => $tempDir.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'bin',
+            ]);
 
             $cacheDir = $this->resolveComposerCacheDir();
             if ($cacheDir !== null) {
                 $env['COMPOSER_CACHE_DIR'] = $cacheDir;
             }
 
+            $timeout = (int) (Config::get('package-audit.timeouts.isolated') ?? 300);
+
             // Step 7: composer install --prefer-dist --no-interaction --no-progress
             $installProcess = Process::path($tempDir)
-                ->timeout(300)
+                ->timeout($timeout)
                 ->env($env)
                 ->run(['composer', 'install', '--prefer-dist', '--no-interaction', '--no-progress']);
 
@@ -463,7 +470,7 @@ class AuditRunner
             }
 
             $testProcess = Process::path($tempDir)
-                ->timeout(300)
+                ->timeout($timeout)
                 ->env($env)
                 ->run([$isolatedRunner, '-c', $phpunitXml, '--fail-on-empty-test-suite']);
 
@@ -710,7 +717,7 @@ class AuditRunner
             return ltrim(trim($latestTagProcess->output()), 'v');
         }
 
-        return '0.1.0';
+        return 'dev-main';
     }
 
     public function resolveGitCommit(string $packagePath): string
