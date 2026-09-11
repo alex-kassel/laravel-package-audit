@@ -1,3 +1,4 @@
 /vendor/
 /runs/
 .phpunit.result.cache
+/.audit/
