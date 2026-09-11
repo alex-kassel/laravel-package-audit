@@ -6,8 +6,8 @@
 
 <p align="center">
   <a href="AUDIT.json"><img src="https://img.shields.io/badge/Audit-Verified-10b981?logo=shield" alt="Audit Verified"></a>
-  <a href="https://github.com/alex-kassel/laravel-package-audit"><img src="https://img.shields.io/badge/Release-v1.2.0-10b981?logo=shield" alt="Version"></a>
-  <a href="https://laravel.com"><img src="https://img.shields.io/badge/Laravel-11%20%7C%2012-ff2d20?logo=laravel&logoColor=white" alt="Laravel Support"></a>
+  <a href="https://github.com/alex-kassel/laravel-package-audit"><img src="https://img.shields.io/badge/Release-v1.2.1-10b981?logo=shield" alt="Version"></a>
+  <a href="https://laravel.com"><img src="https://img.shields.io/badge/Laravel-11%20%7C%2012%20%7C%2013-ff2d20?logo=laravel&logoColor=white" alt="Laravel Support"></a>
   <a href="https://php.net"><img src="https://img.shields.io/badge/PHP-8.2+-777bb4?logo=php&logoColor=white" alt="PHP Support"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License"></a>
 </p>
@@ -77,7 +77,7 @@ php artisan package:audit packages/my-vendor/my-package --verify
 ## 📋 Requirements
 
 - **PHP**: 8.2 or higher (fully compatible with PHP 8.3 and PHP 8.4)
-- **Laravel Framework**: 11.0 or 12.0
+- **Laravel Framework**: 11.0, 12.0, or 13.0
 - **Git**: Installed and available in PATH
 - **Composer**: 2.2 or higher
 
