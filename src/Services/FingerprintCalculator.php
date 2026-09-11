@@ -24,12 +24,12 @@ class FingerprintCalculator
                 $canonicalChecks[$key] = [
                     'check' => $r->check,
                     'status' => $r->status,
-                    'output_hash' => hash('sha256', $r->output),
+                    'output_hash' => hash('sha256', $this->normalizeOutput($r->output)),
                 ];
             } elseif (is_array($r)) {
                 $outputHash = isset($r['output_hash'])
                     ? (string) $r['output_hash']
-                    : hash('sha256', (string) ($r['output'] ?? ''));
+                    : hash('sha256', $this->normalizeOutput((string) ($r['output'] ?? '')));
 
                 $canonicalChecks[$key] = [
                     'check' => (string) ($r['check'] ?? $key),
@@ -45,6 +45,26 @@ class FingerprintCalculator
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
         return 'sha256:'.hash('sha256', (string) $canonical);
+    }
+
+    /**
+     * Normalize dynamic output (e.g. execution times, memory usage, temp directories)
+     * so that the output hash is strictly deterministic across independent verification runs.
+     */
+    public function normalizeOutput(string $output): string
+    {
+        // Normalize line breaks
+        $normalized = str_replace(["\r\n", "\r"], "\n", $output);
+
+        // Normalize dynamic test runner elapsed durations and memory stats
+        $normalized = (string) preg_replace('/"duration_ms":\s*\d+/', '"duration_ms":0', $normalized);
+        $normalized = (string) preg_replace('/Time:\s*[0-9:.]+(?:,\s*Memory:\s*[0-9.]+\s*[KMGT]?B)?/i', 'Time: 00:00.000', $normalized);
+
+        // Normalize ephemeral temp directory paths (Windows & Unix)
+        $normalized = (string) preg_replace('~[A-Za-z]:[/\\\\][^\n"\'\s]+package-audit-[a-f0-9]+~i', '<TEMP_DIR>', $normalized);
+        $normalized = (string) preg_replace('~/(?:tmp|private/var/folders)/[^\n"\'\s]+package-audit-[a-f0-9]+~i', '<TEMP_DIR>', $normalized);
+
+        return trim($normalized);
     }
 
     /**

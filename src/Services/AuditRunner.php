@@ -141,12 +141,22 @@ class AuditRunner
 
         $statusOutput = trim($statusProcess->output());
         if ($statusOutput !== '') {
-            return new CheckResult(
-                check: 'git_cleanliness',
-                status: 'failed',
-                output: "Working tree has uncommitted or untracked changes:\n".$statusOutput,
-                durationSeconds: (float) round(microtime(true) - $startTime, 3),
-            );
+            $lines = array_filter(explode("\n", str_replace("\r", '', $statusOutput)));
+            $certFilename = (string) (Config::get('package-audit.certificate_filename') ?? 'AUDIT.json');
+            $unrelated = array_filter($lines, function ($line) use ($certFilename) {
+                $file = trim(substr($line, 3));
+
+                return $file !== $certFilename;
+            });
+
+            if (! empty($unrelated)) {
+                return new CheckResult(
+                    check: 'git_cleanliness',
+                    status: 'failed',
+                    output: "Working tree has uncommitted or untracked changes:\n".implode("\n", $unrelated),
+                    durationSeconds: (float) round(microtime(true) - $startTime, 3),
+                );
+            }
         }
 
         $commit = $this->resolveGitCommit($packagePath);
