@@ -1,0 +1,48 @@
+{
+    "name": "alex-kassel/laravel-package-audit",
+    "description": "Self-contained pre-release audit and tamper-proof certification package for Laravel and PHP packages.",
+    "license": "MIT",
+    "type": "library",
+    "keywords": [
+        "laravel",
+        "package",
+        "audit",
+        "verification",
+        "quality",
+        "certification"
+    ],
+    "authors": [
+        {
+            "name": "Alexander Macenko",
+            "email": "alexander.macenko@gmail.com",
+            "role": "Author & Maintainer"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^11.0|^12.0|^13.0",
+        "illuminate/console": "^11.0|^12.0|^13.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^9.0|^10.0",
+        "phpunit/phpunit": "^11.0|^12.0",
+        "mockery/mockery": "^1.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "AlexKassel\\PackageAudit\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AlexKassel\\PackageAudit\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "AlexKassel\\PackageAudit\\PackageAuditServiceProvider"
+            ]
+        }
+    }
+}
