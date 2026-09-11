@@ -1,63 +1,45 @@
 ---
 name: package-audit
 description: >-
-  Use this skill when the user requests a full package audit
+  Use this skill when auditing, certifying, or verifying quality of PHP/Laravel packages
   (e.g., "проведи полный аудит пакета", "полный аудит", "audit package", "run package audit").
 ---
 
 # Package Audit Skill
 
-This skill provides the self-contained industrial audit framework for packages in the repository.
+This skill guides AI agents and developers through auditing, remediating, and certifying Laravel/PHP packages using the self-contained `php artisan package:audit` engine.
 
-## Directory Structure & Resources
+## Audit Workflow
 
-- [**Orchestrator Guide**](./references/orchestrator.md): Detailed 2-phase lifecycle and agent aggregation workflow.
-- [**7 Specialized Audit Contracts**](./references/agents/):
-  - [`01_architecture_api.md`](./references/agents/01_architecture_api.md) — Public API surface, BC safety, host isolation.
-  - [`02_code_quality.md`](./references/agents/02_code_quality.md) — Pint, PHPStan Level 8+, exceptions taxonomy.
-  - [`03_database.md`](./references/agents/03_database.md) — Migrations, table prefixes, SQLite/MySQL isolation.
-  - [`04_security_isolation.md`](./references/agents/04_security_isolation.md) — Secret leaks, service container pollution.
-  - [`05_composer_supply_chain.md`](./references/agents/05_composer_supply_chain.md) — `composer validate --strict`, export-ignore.
-  - [`06_testing_compatibility.md`](./references/agents/06_testing_compatibility.md) — Unit & Feature test assertions.
-  - [`07_consumer_release.md`](./references/agents/07_consumer_release.md) — README compliance, CHANGELOG, LICENSE.
-- **Templates & Schemas**:
-  - Manifest Template: [`resources/templates/audit-manifest.template.json`](./resources/templates/audit-manifest.template.json)
-  - Release Gate Template: [`resources/templates/release-gate.template.md`](./resources/templates/release-gate.template.md)
-  - JSON Schemas: [`resources/schema/`](./resources/schema/)
-- **Package-Local Audit Runs**: Saved directly in `packages/<vendor>/<package>/.audit/YYYY-MM-DD_HH-MM-SS/` (gitignored).
+### Phase 1: Read-Only Diagnosis & Decision Gate
+1. Run audit in JSON or console mode:
+   ```bash
+   php artisan package:audit <path/to/package> --json --no-commit
+   ```
+2. Analyze the 8 automated quality gates:
+   - **`git_cleanliness`**: Working tree status and git repository validity.
+   - **`composer_validate`**: Strict Composer schema validation (`composer validate --strict`).
+   - **`pint`**: Laravel Pint code formatting (`--test`).
+   - **`phpstan`**: Strict static analysis (Level 8+).
+   - **`tests`**: Automated test suite (PHPUnit / Pest).
+   - **`isolated`**: Standalone sandbox installation (`composer install` in clean temp directory, verifying no leaky host dependencies).
+   - **`readme`**: Title heading and standard sections compliance (`Requirements`, `Installation`, `Usage`, `Testing`, `License`).
+   - **`export_ignore`**: Clean archive distribution in `.gitattributes`.
+3. Report findings clearly:
+   - **Automated Tool Baseline**: Status and output of each check.
+   - **Planned Routine Fixes**: Code formatting, docblocks, type annotations.
+   - **Architectural / Public Decisions**: Any breaking changes or design decisions requiring human approval.
+4. 🛑 **Human Decision Gate**:
+   - If any architectural or breaking changes exist, halt and request human approval before making modifications.
 
----
-
-## Operational Workflow
-
-### Phase 1: Audit-Only & Human Decision Gate (Read-Only)
-1. **Pre-Audit Discovery**:
-   - Inspect package archetype (Library, Engine, Domain) and identify consumers in `packages/`.
-   - Determine target version (default `0.1.0` or latest git tag).
-2. **Execute 7 Specialized Audit Contracts**:
-   - Run each contract defined in [`references/agents/`](./references/agents/).
-   - Populate audit manifest using [`resources/templates/audit-manifest.template.json`](./resources/templates/audit-manifest.template.json).
-3. **Compile Run Artifacts**:
-   - Save findings and reports into `packages/<vendor>/<package>/.audit/<timestamp>/findings.json`.
-   - Compile actionable choices into `packages/<vendor>/<package>/.audit/<timestamp>/decisions.md`.
-   - Generate preliminary `RELEASE-GATE.md`.
-4. **Mandatory Phase 1 Chat Output Protocol**:
-   In the user response, the agent MUST format findings into 3 structured sections:
-   - **Section 1: Test & Tooling Baseline**: Exact results of CLI verification (`composer pkg:check <vendor/package>` — Composer validate, Pint, PHPStan, PHPUnit/Pest).
-   - **Section 2: Mechanical & Routine Fixes**: List of non-invasive fixes planned for Phase 2 (Pint formatting, PHPStan type annotations, missing docblocks, syntax cleanups).
-   - **Section 3: Human Decisions & Logic Interventions**: Items requiring explicit human approval (public API changes, adding/removing/calling methods, service logic changes, schema/migration alterations).
-     - **Mandatory Agent Recommendation & Rationale**: For every non-obvious issue or dilemma, the agent MUST provide its explicit technical recommendation (`(Recommended)`) accompanied by concrete architectural rationale and trade-off analysis.
-5. **🛑 MANDATORY HUMAN GATE (HARD STOP)**:
-   - **Zero Code Modification**: The agent is **strictly prohibited** from editing any source files, running mutating commands, creating git commits, or proceeding to Phase 2 in the same turn.
-   - The agent **MUST stop calling tools and end the turn** immediately after outputting the Phase 1 report, awaiting the user's explicit confirmation or feedback on Section 3 items.
-
-### Phase 2: Remediation & Certification (After User Confirmation)
-1. **Remediation Graph**:
-   Execute fixes sequentially based on user decisions: Root Architectural/Schema → API/DB refactor → Code quality & types → Tests.
-2. **Atomic Commits & Delta Verification**:
-   - Create atomic semantic commits for discrete defect groups.
-   - Verify with `composer pkg:check <vendor>/<package> --json` and `composer pkg:readme <vendor>/<package> --json`.
-3. **Freeze `RELEASE-GATE.md` & Badge**:
-   - Copy final certified `RELEASE-GATE.md` into target package root with exact commit SHA and framework version.
-   - Update README audit badge and monorepo DASHBOARD.md.
-   *Rule: `RELEASE-GATE.md` is an immutable certified snapshot and must never be edited in-place.*
+### Phase 2: Remediation & Certification
+1. Apply approved fixes to the package source.
+2. Commit clean changes to Git.
+3. Run the certification audit:
+   ```bash
+   php artisan package:audit <path/to/package>
+   ```
+4. Verify that `AUDIT.json` was generated and cryptographic fingerprint verified:
+   ```bash
+   php artisan package:audit <path/to/package> --verify
+   ```

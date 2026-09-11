@@ -178,10 +178,7 @@ return [
 
 ## 🤖 AI Agent & Skill Integration
 
-This package preserves the universal Agentic Skill specification ([`SKILL.md`](SKILL.md)) and the 7 specialized domain review contracts located in [`references/agents/`](references/agents/).
-
-When using autonomous coding agents (Google Antigravity, Cursor, Claude Code), trigger human-in-the-loop audits:
-> *"Run a full package audit on `packages/vendor/package-name` using the package-audit skill."*
+This package provides a universal Agentic Skill specification ([`SKILL.md`](SKILL.md)) designed for autonomous AI coding agents (Google Antigravity, Cursor, Claude Code, Windsurf). Agents can use the skill to execute pre-release quality audits, adhere to human-in-the-loop decision checkpoints, and issue cryptographic certificates automatically.
 
 ---
 
