@@ -46,6 +46,11 @@ Determine whether the package can actually be installed, configured, understood,
     ```
   - **No Repository Pollution**: The package root must NOT be polluted with redundant, manual `RELEASE-GATE.md` markdown files. Full human audit histories and logs are stored exclusively in `.audit/<timestamp>/FINAL-REPORT.md` (which is gitignored).
 
+- **Certification Cadence (Stable vs Patch Releases)**:
+  - **Audits are NOT required for every minor patch or bugfix**: A package is NOT obligated to re-run the full certification cycle on every routine patch (e.g. going from `v1.2.0` to `v1.2.1`).
+  - **Inherited Certification**: A patch release may legitimately reference the `AUDIT.json` certificate of its parent stable milestone (e.g. `v1.2.0`). This is normal and expected engineering practice.
+  - **Certification Triggers**: Full package audits and cryptographic re-certification are reserved for **designated stable releases** (e.g. `v1.0.0`, `v1.5.0`, `v2.0.0`) or releases introducing substantial architectural changes.
+
 ### 4. Release Gate Blockers
 Categorize as **BLOCKER** if any of the following occur:
 - Package fails to install via Composer in a clean Laravel application.

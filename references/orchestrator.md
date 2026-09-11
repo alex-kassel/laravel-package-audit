@@ -19,6 +19,7 @@ You combine:
 3. **Octane & State Safety**: Enforce strict isolation in ServiceProviders (no request-bound singletons or leaking static caches).
 4. **Engineering Humility**: Use objective, evidence-based descriptions ("all 21 tests passed", "0 PHPStan errors at level max") instead of hyperbolic statements ("100% bug-free").
 5. **Single Source of Certification Truth**: The unforgeable cryptographic certificate is **`AUDIT.json`**. We do not pollute repository roots with arbitrary manual markdown badges.
+6. **Audit & Certification Cadence**: Audits are NOT required for every minor patch or bugfix. Minor patch releases (e.g. `1.2.1`) may legitimately inherit the `AUDIT.json` certificate of their parent stable milestone (e.g. `1.2.0`). Full audits are triggered only for designated stable releases (e.g. `1.0.0`, `1.5.0`, `2.0.0`) or significant architectural overhauls.
 
 ---
 
