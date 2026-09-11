@@ -13,6 +13,7 @@ use Illuminate\Support\ServiceProvider;
 class PackageAuditServiceProvider extends ServiceProvider
 {
     public const VERSION = '1.0.0';
+
     /**
      * Register any application services.
      */

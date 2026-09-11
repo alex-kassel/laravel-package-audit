@@ -6,6 +6,7 @@ namespace AlexKassel\PackageAudit\Services;
 
 use AlexKassel\PackageAudit\DTOs\AuditReport;
 use AlexKassel\PackageAudit\DTOs\CheckResult;
+use AlexKassel\PackageAudit\PackageAuditServiceProvider;
 use FilesystemIterator;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\Config;
@@ -108,7 +109,7 @@ class AuditRunner
             checks: $checks,
             verdict: $verdict,
             fingerprint: $fingerprint,
-            auditorVersion: \AlexKassel\PackageAudit\PackageAuditServiceProvider::VERSION,
+            auditorVersion: PackageAuditServiceProvider::VERSION,
         );
     }
 
