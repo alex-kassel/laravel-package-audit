@@ -128,7 +128,7 @@ class CertificateVerifier
             }
 
             // 6. Re-run all checks on the certified commit snapshot
-            $reAudit = $this->auditRunner->audit($realPackagePath);
+            $reAudit = $this->auditRunner->audit($realPackagePath, $report->version);
 
             // 7. Recompute fingerprint and compare
             if ($reAudit->fingerprint !== $report->fingerprint) {

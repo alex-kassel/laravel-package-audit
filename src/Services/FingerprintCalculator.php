@@ -64,6 +64,9 @@ class FingerprintCalculator
         $normalized = (string) preg_replace('~[A-Za-z]:[/\\\\][^\n"\'\s]+package-audit-[a-f0-9]+~i', '<TEMP_DIR>', $normalized);
         $normalized = (string) preg_replace('~/(?:tmp|private/var/folders)/[^\n"\'\s]+package-audit-[a-f0-9]+~i', '<TEMP_DIR>', $normalized);
 
+        // Normalize git branch in cleanliness output (since verification runs on detached HEAD)
+        $normalized = (string) preg_replace('/,\s*Branch:\s*[^\n\r]+/i', ', Branch: <BRANCH>', $normalized);
+
         return trim($normalized);
     }
 
