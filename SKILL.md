@@ -1,7 +1,8 @@
-﻿---
+---
 name: package-audit
 origin: alex-kassel/laravel-package-audit
 version: 1.2.1
+status: published
 description: >-
   Use this skill EXCLUSIVELY when the user explicitly requests a full package audit and release certification
   (e.g., "проведи полный аудит пакета", "полный аудит перед релизом", "audit package", "certify package").
